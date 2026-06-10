@@ -160,13 +160,15 @@ const CURRENT_WEEK = {
         {
           type: "article",
           icon: "📰",
-          label: "Liahona Article",
-          title: "When You Feel Alone in the Wilderness",
-          author: "Come Follow Me Manual 2026",
-          publication: "Official CFM Study Guide",
+          label: "Come Follow Me Manual",
+          title: "1 Kings 17–19 Study Guide",
+          author: "The Church of Jesus Christ of Latter-day Saints",
+          publication: "Come Follow Me Manual 2022 (Old Testament)",
           description:
-            "The manual explores Elijah's experience under the juniper tree as a type for our own exhausted, discouraged moments — and God's patient, nourishing response.",
-          url: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-individuals-and-families-old-testament-2022/26?lang=eng",
+            "The official CFM manual section on Elijah — exploring his experience under the juniper tree as a type for our own exhausted moments, and God's patient, nourishing response.",
+          url: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-individuals-and-families-old-testament-2022/26",
+          fallbackSearch: "Come Follow Me 1 Kings 17 Elijah manual",
+          fallbackUrl: "https://www.google.com/search?q=Come+Follow+Me+1+Kings+17+Elijah+manual+churchofjesuschrist.org",
         },
         {
           type: "question",
@@ -201,7 +203,8 @@ const CURRENT_WEEK = {
           conference: "April 2020 General Conference",
           description:
             "President Nelson's landmark talk on the Savior's invitation to hear Him — and our need to reduce noise, still our minds, and listen as Elijah listened. Foundational reading alongside 1 Kings 19.",
-          url: "https://www.churchofjesuschrist.org/study/general-conference/2020/04/45nelson?lang=eng",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2020/04/45nelson",
+          fallbackUrl: "https://www.google.com/search?q=%22Hear+Him%22+Russell+Nelson+April+2020+General+Conference",
         },
         {
           type: "question",
@@ -249,7 +252,8 @@ const CURRENT_WEEK = {
           conference: "April 2013 General Conference",
           description:
             "President Monson on the pattern of leaving everything to follow Christ — illustrated beautifully by how Elisha responded without hesitation when the mantle fell on his shoulders.",
-          url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/come-follow-me?lang=eng",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/come-follow-me",
+          fallbackUrl: "https://www.google.com/search?q=%22Come+Follow+Me%22+Thomas+Monson+April+2013+General+Conference",
         },
         {
           type: "question",
@@ -525,13 +529,31 @@ function ContentCard({ item, completed, onToggle, studyMode }) {
               fontFamily: "'Source Sans 3', sans-serif",
               fontSize: 16, color: "#555", lineHeight: 1.7, margin: "0 0 14px",
             }}>{item.description}</p>
-            <a href={item.url} target="_blank" rel="noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 14, fontWeight: 700, color: cfg.color,
-              background: "#fff", border: `1.5px solid ${cfg.border}`,
-              padding: "7px 14px", borderRadius: 20,
-              textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
-            }}>📰 Read Article →</a>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+              <a href={item.url} target="_blank" rel="noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 14, fontWeight: 700, color: cfg.color,
+                background: "#fff", border: `1.5px solid ${cfg.border}`,
+                padding: "7px 14px", borderRadius: 20,
+                textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+              }}>📰 Open Article →</a>
+              {item.fallbackUrl && (
+                <a href={item.fallbackUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 13, fontWeight: 600, color: "#777",
+                  background: "#F5F5F5", border: "1.5px solid #DDD",
+                  padding: "7px 14px", borderRadius: 20,
+                  textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                }}>🔍 Search Google instead</a>
+              )}
+            </div>
+            <p style={{
+              fontSize: 12, color: "#B0B0B0", margin: 0, lineHeight: 1.6,
+              fontFamily: "'Source Sans 3', sans-serif",
+            }}>
+              💡 If the link gives a 502 error, use "Search Google" above,
+              or open the <strong>Gospel Library app</strong> and search the title directly.
+            </p>
           </>)}
 
           {/* General Conference */}
@@ -544,13 +566,31 @@ function ContentCard({ item, completed, onToggle, studyMode }) {
               fontFamily: "'Source Sans 3', sans-serif",
               fontSize: 16, color: "#555", lineHeight: 1.7, margin: "0 0 14px",
             }}>{item.description}</p>
-            <a href={item.url} target="_blank" rel="noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 14, fontWeight: 700, color: "#1A237E",
-              background: "#fff", border: "1.5px solid #3F51B5",
-              padding: "7px 14px", borderRadius: 20,
-              textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
-            }}>🏛️ Read Talk →</a>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+              <a href={item.url} target="_blank" rel="noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 14, fontWeight: 700, color: "#1A237E",
+                background: "#fff", border: "1.5px solid #3F51B5",
+                padding: "7px 14px", borderRadius: 20,
+                textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+              }}>🏛️ Read Talk →</a>
+              {item.fallbackUrl && (
+                <a href={item.fallbackUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 13, fontWeight: 600, color: "#777",
+                  background: "#F5F5F5", border: "1.5px solid #DDD",
+                  padding: "7px 14px", borderRadius: 20,
+                  textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                }}>🔍 Search Google instead</a>
+              )}
+            </div>
+            <p style={{
+              fontSize: 12, color: "#B0B0B0", margin: 0, lineHeight: 1.6,
+              fontFamily: "'Source Sans 3', sans-serif",
+            }}>
+              💡 If the link gives a 502 error, use "Search Google" above,
+              or open the <strong>Gospel Library app</strong> and search the title directly.
+            </p>
           </>)}
 
         </div>
