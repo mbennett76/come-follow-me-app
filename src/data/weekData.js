@@ -121,7 +121,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Opening Verse",
             reference: "1 Kings 18:21",
             text: "How long halt ye between two opinions? if the Lord be God, follow him: but if Baal, then follow him.",
-            url: "https://www.bible.com/bible/1/1KI.18.21.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/18.21#p21", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng&id=p21#p21",
           },
           {
             // BibleProject 1-2 Kings — ID verified: bVFW3wbi9pk
@@ -145,7 +145,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "1 Kings 17:1–24",
             text: "Elijah declares a drought, is fed by ravens at Cherith, then journeys to Zarephath. A widow shares her last meal and her barrel of meal and cruse of oil never run dry. Her son dies and Elijah raises him.",
-            url: "https://www.bible.com/bible/1/1KI.17.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/17", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/17?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -173,7 +173,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "1 Kings 18:1–40",
             text: "Elijah confronts 450 priests of Baal on Mount Carmel. He repairs the broken altar with 12 stones, drenches it with water, prays — and fire falls from heaven. The people cry: 'The Lord, he is the God.'",
-            url: "https://www.bible.com/bible/1/1KI.18.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/18", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -203,7 +203,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "1 Kings 19:1–18",
             text: "After his greatest victory, Elijah flees Jezebel, collapses under a juniper tree, and asks to die. An angel feeds him twice. He travels 40 days to Horeb, hides in a cave. God meets him — not in wind, earthquake, or fire, but in a still small voice.",
-            url: "https://www.bible.com/bible/1/1KI.19.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/19", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -233,7 +233,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Key Verses",
             reference: "1 Kings 19:11–12",
             text: "Behold, the Lord passed by, and a great and strong wind rent the mountains... but the Lord was not in the wind: and after the wind an earthquake; but the Lord was not in the earthquake: and after the earthquake a fire; but the Lord was not in the fire: and after the fire a still small voice.",
-            url: "https://www.bible.com/bible/1/1KI.19.11-12.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/19.11#p11", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p11#p11",
           },
           {
             type: "conference", icon: "🏛️", label: "General Conference",
@@ -264,7 +264,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "1 Kings 19:19–21",
             text: "Elijah finds Elisha plowing with twelve yoke of oxen. He casts his mantle upon him. Elisha immediately sacrifices his oxen, burns his plowing equipment, and follows — leaving no way back.",
-            url: "https://www.bible.com/bible/1/1KI.19.19-21.KJV",
+            url: "gospellibrary://content/scriptures/ot/1-kgs/19.19#p19", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p19#p19",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -332,7 +332,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Opening Verse",
             reference: "2 Kings 5:8",
             text: "It shall come to pass, when he cometh to thee, that he shall know that there is a prophet in Israel.",
-            url: "https://www.bible.com/bible/1/2KI.5.8.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/5.8#p8", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng&id=p8#p8",
           },
           {
             // BibleProject 1-2 Kings same video — covers both books, ID: bVFW3wbi9pk verified
@@ -356,7 +356,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "2 Kings 2:1–15",
             text: "Elijah is taken up in a whirlwind of fire. Elisha watches, picks up the fallen mantle, strikes the Jordan — and it parts. The other prophets say: 'The spirit of Elijah doth rest on Elisha.'",
-            url: "https://www.bible.com/bible/1/2KI.2.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/2", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -384,7 +384,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "2 Kings 4:1–7",
             text: "A widow with debts about to lose her sons to slavery has only a pot of oil. Elisha tells her to gather empty vessels — as many as she can. She fills every one. The oil stops only when there are no more vessels to fill.",
-            url: "https://www.bible.com/bible/1/2KI.4.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/4", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -414,7 +414,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "2 Kings 5:1–19",
             text: "Naaman, a great Syrian general with leprosy, travels to Elisha expecting drama. Elisha sends a messenger: dip in the Jordan seven times. Naaman almost turns back in pride. His servants persuade him. He dips seven times and is healed — his flesh 'like unto the flesh of a little child.'",
-            url: "https://www.bible.com/bible/1/2KI.5.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/5", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -442,7 +442,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Key Passage",
             reference: "2 Kings 6:15–17",
             text: "When Elisha's servant saw the enemy army surrounding them, he cried 'Alas, my master! how shall we do?' And Elisha prayed: Lord, open his eyes, that he may see. And the Lord opened the young man's eyes; and behold, the mountain was full of horses and chariots of fire round about Elisha.",
-            url: "https://www.bible.com/bible/1/2KI.6.15-17.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/6.15#p15", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/6?lang=eng&id=p15#p15",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",
@@ -477,7 +477,7 @@ export const WEEKS = [
             type: "scripture", icon: "📜", label: "Scripture Reading",
             reference: "2 Kings 4:8–37",
             text: "The Shunammite woman builds a room for Elisha. Her promised son is given and then dies suddenly. She rides to Elisha — and when asked if all is well, says simply: 'It is well.' Elisha raises the boy from the dead.",
-            url: "https://www.bible.com/bible/1/2KI.4.8-37.KJV",
+            url: "gospellibrary://content/scriptures/ot/2-kgs/4.8#p8", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng&id=p8#p8",
           },
           {
             type: "insight", icon: "💡", label: "Study Insight",

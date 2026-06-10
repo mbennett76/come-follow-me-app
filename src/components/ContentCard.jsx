@@ -50,13 +50,32 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               fontFamily: "'EB Garamond', serif", fontSize: 18,
               lineHeight: 1.75, color: "#2A3828", fontStyle: "italic", margin: "0 0 12px",
             }}>"{item.text}"</p>
-            <a href={item.url} target="_blank" rel="noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 14, fontWeight: 700, color: cfg.color,
-              background: "#fff", border: `1.5px solid ${cfg.border}`,
-              padding: "7px 14px", borderRadius: 20, textDecoration: "none",
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              {/* Primary: Gospel Library deep link — opens app on phone */}
+              <a href={item.url} style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 14, fontWeight: 700, color: cfg.color,
+                background: "#fff", border: `1.5px solid ${cfg.border}`,
+                padding: "7px 14px", borderRadius: 20, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>📱 Open in Gospel Library</a>
+              {/* Fallback: web browser */}
+              {item.webUrl && (
+                <a href={item.webUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 13, fontWeight: 600, color: "#777",
+                  background: "#F5F5F5", border: "1.5px solid #DDD",
+                  padding: "7px 13px", borderRadius: 20, textDecoration: "none",
+                  fontFamily: "'Source Sans 3', sans-serif",
+                }}>🌐 Open in Browser</a>
+              )}
+            </div>
+            <p style={{
+              fontSize: 11, color: "#BBB", margin: "8px 0 0", lineHeight: 1.5,
               fontFamily: "'Source Sans 3', sans-serif",
-            }}>📖 Open {item.reference} →</a>
+            }}>
+              📱 Tap "Gospel Library" to open in the app · 🌐 "Browser" as backup
+            </p>
           </>)}
 
           {/* Insight / intro / review / nextweek */}

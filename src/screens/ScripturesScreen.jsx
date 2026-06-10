@@ -1,32 +1,101 @@
 export default function ScripturesScreen({ week }) {
   const books = [
-    { ref: "1 Kings 17", url: "https://www.bible.com/bible/1/1KI.17.KJV", desc: "Elijah and the widow, ravens at Cherith" },
-    { ref: "1 Kings 18", url: "https://www.bible.com/bible/1/1KI.18.KJV", desc: "Mount Carmel, fire from heaven" },
-    { ref: "1 Kings 19", url: "https://www.bible.com/bible/1/1KI.19.KJV", desc: "Still small voice, Elisha called" },
-    { ref: "2 Kings 2", url: "https://www.bible.com/bible/1/2KI.2.KJV", desc: "Elijah taken up, Elisha receives mantle" },
-    { ref: "2 Kings 4", url: "https://www.bible.com/bible/1/2KI.4.KJV", desc: "Widow's oil, Shunammite's son raised" },
-    { ref: "2 Kings 5", url: "https://www.bible.com/bible/1/2KI.5.KJV", desc: "Naaman healed of leprosy" },
-    { ref: "2 Kings 6", url: "https://www.bible.com/bible/1/2KI.6.KJV", desc: "Chariots of fire, eyes opened" },
+    {
+      ref: "1 Kings 17", desc: "Elijah and the widow, ravens at Cherith",
+      appUrl: "gospellibrary://content/scriptures/ot/1-kgs/17",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/17?lang=eng",
+    },
+    {
+      ref: "1 Kings 18", desc: "Mount Carmel, fire from heaven",
+      appUrl: "gospellibrary://content/scriptures/ot/1-kgs/18",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng",
+    },
+    {
+      ref: "1 Kings 19", desc: "Still small voice, Elisha called",
+      appUrl: "gospellibrary://content/scriptures/ot/1-kgs/19",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng",
+    },
+    {
+      ref: "2 Kings 2", desc: "Elijah taken up, Elisha receives mantle",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/2",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng",
+    },
+    {
+      ref: "2 Kings 4", desc: "Widow's oil, Shunammite's son raised",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/4",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng",
+    },
+    {
+      ref: "2 Kings 5", desc: "Naaman healed of leprosy",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/5",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng",
+    },
+    {
+      ref: "2 Kings 6", desc: "Chariots of fire, eyes opened",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/6",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/6?lang=eng",
+    },
   ];
 
   const keyVerses = [
-    { ref: "1 Kings 18:21", text: "How long halt ye between two opinions? if the Lord be God, follow him.", url: "https://www.bible.com/bible/1/1KI.18.21.KJV" },
-    { ref: "1 Kings 19:12", text: "And after the earthquake a fire; but the Lord was not in the fire: and after the fire a still small voice.", url: "https://www.bible.com/bible/1/1KI.19.12.KJV" },
-    { ref: "2 Kings 2:9", text: "And Elisha said, I pray thee, let a double portion of thy spirit be upon me.", url: "https://www.bible.com/bible/1/2KI.2.9.KJV" },
-    { ref: "2 Kings 5:13", text: "If the prophet had bid thee do some great thing, wouldest thou not have done it?", url: "https://www.bible.com/bible/1/2KI.5.13.KJV" },
-    { ref: "2 Kings 6:16", text: "Fear not: for they that be with us are more than they that be with them.", url: "https://www.bible.com/bible/1/2KI.6.16.KJV" },
+    {
+      ref: "1 Kings 18:21",
+      text: "How long halt ye between two opinions? if the Lord be God, follow him.",
+      appUrl: "gospellibrary://content/scriptures/ot/1-kgs/18.21#p21",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng&id=p21#p21",
+    },
+    {
+      ref: "1 Kings 19:12",
+      text: "And after the earthquake a fire; but the Lord was not in the fire: and after the fire a still small voice.",
+      appUrl: "gospellibrary://content/scriptures/ot/1-kgs/19.12#p12",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p12#p12",
+    },
+    {
+      ref: "2 Kings 2:9",
+      text: "I pray thee, let a double portion of thy spirit be upon me.",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/2.9#p9",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng&id=p9#p9",
+    },
+    {
+      ref: "2 Kings 5:13",
+      text: "If the prophet had bid thee do some great thing, wouldest thou not have done it?",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/5.13#p13",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng&id=p13#p13",
+    },
+    {
+      ref: "2 Kings 6:16",
+      text: "Fear not: for they that be with us are more than they that be with them.",
+      appUrl: "gospellibrary://content/scriptures/ot/2-kgs/6.16#p16",
+      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/6?lang=eng&id=p16#p16",
+    },
   ];
 
   return (
     <div style={{ padding: "20px 16px" }}>
       <h2 style={{
-        fontFamily: "'EB Garamond', serif", fontSize: 26, fontWeight: 600,
-        color: "#1B3A2D", marginBottom: 4,
+        fontFamily: "'EB Garamond', serif", fontSize: 26,
+        fontWeight: 600, color: "#1B3A2D", marginBottom: 4,
       }}>Scriptures</h2>
       <p style={{
         fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-        color: "#888", marginBottom: 20,
+        color: "#888", marginBottom: 6,
       }}>{week.scriptureRange} · {week.dateRange}</p>
+
+      {/* App tip banner */}
+      <div style={{
+        background: "#E8F5EE", border: "1.5px solid #7AB648",
+        borderRadius: 12, padding: "10px 14px", marginBottom: 20,
+        display: "flex", alignItems: "flex-start", gap: 10,
+      }}>
+        <span style={{ fontSize: 20, flexShrink: 0 }}>📱</span>
+        <p style={{
+          fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+          color: "#2D5016", margin: 0, lineHeight: 1.6,
+        }}>
+          <strong>Gospel Library links</strong> open directly in your Gospel Library app.
+          Each chapter also has a <strong>browser backup</strong> if needed.
+        </p>
+      </div>
 
       {/* Chapter list */}
       <div style={{
@@ -34,23 +103,20 @@ export default function ScripturesScreen({ week }) {
         border: "1.5px solid #E0DDD8", marginBottom: 20, overflow: "hidden",
       }}>
         <div style={{
-          padding: "12px 16px", background: "#F0F7E8",
+          padding: "11px 16px", background: "#F0F7E8",
           borderBottom: "1px solid #E0DDD8",
         }}>
           <span style={{
             fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-            fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-            color: "#2D5016",
+            fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2D5016",
           }}>📖 This Week's Chapters</span>
         </div>
         {books.map((b, i) => (
-          <a key={i} href={b.url} target="_blank" rel="noreferrer" style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "13px 16px", textDecoration: "none",
+          <div key={i} style={{
+            padding: "13px 16px",
             borderBottom: i < books.length - 1 ? "1px solid #F0EDE8" : "none",
-            background: "#fff",
           }}>
-            <div>
+            <div style={{ marginBottom: 8 }}>
               <div style={{
                 fontFamily: "'Source Sans 3', sans-serif", fontSize: 15,
                 fontWeight: 700, color: "#1B3A2D",
@@ -60,8 +126,23 @@ export default function ScripturesScreen({ week }) {
                 color: "#888", marginTop: 2,
               }}>{b.desc}</div>
             </div>
-            <span style={{ fontSize: 18, color: "#7AB648" }}>→</span>
-          </a>
+            <div style={{ display: "flex", gap: 8 }}>
+              <a href={b.appUrl} style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                fontSize: 12, fontWeight: 700, color: "#2D5016",
+                background: "#F0F7E8", border: "1.5px solid #7AB648",
+                padding: "5px 11px", borderRadius: 16, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>📱 Gospel Library</a>
+              <a href={b.webUrl} target="_blank" rel="noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                fontSize: 12, fontWeight: 600, color: "#777",
+                background: "#F5F5F5", border: "1.5px solid #DDD",
+                padding: "5px 11px", borderRadius: 16, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>🌐 Browser</a>
+            </div>
+          </div>
         ))}
       </div>
 
@@ -71,42 +152,49 @@ export default function ScripturesScreen({ week }) {
         border: "1.5px solid #E0DDD8", overflow: "hidden",
       }}>
         <div style={{
-          padding: "12px 16px", background: "#F0F7E8",
+          padding: "11px 16px", background: "#F0F7E8",
           borderBottom: "1px solid #E0DDD8",
         }}>
           <span style={{
             fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-            fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-            color: "#2D5016",
+            fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#2D5016",
           }}>📜 Key Verses This Week</span>
         </div>
         {keyVerses.map((v, i) => (
-          <a key={i} href={v.url} target="_blank" rel="noreferrer" style={{
-            display: "block", padding: "14px 16px",
+          <div key={i} style={{
+            padding: "14px 16px",
             borderBottom: i < keyVerses.length - 1 ? "1px solid #F0EDE8" : "none",
-            textDecoration: "none",
           }}>
             <div style={{
-              fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-              fontWeight: 700, color: "#7AB648", letterSpacing: "0.06em",
-              textTransform: "uppercase", marginBottom: 5,
+              fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+              fontWeight: 700, color: "#7AB648", letterSpacing: "0.08em",
+              textTransform: "uppercase", marginBottom: 6,
             }}>{v.ref}</div>
             <div style={{
               fontFamily: "'EB Garamond', serif", fontSize: 17,
-              color: "#2A3828", fontStyle: "italic", lineHeight: 1.65,
+              color: "#2A3828", fontStyle: "italic",
+              lineHeight: 1.65, marginBottom: 10,
             }}>"{v.text}"</div>
-          </a>
+            <div style={{ display: "flex", gap: 8 }}>
+              <a href={v.appUrl} style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                fontSize: 12, fontWeight: 700, color: "#2D5016",
+                background: "#F0F7E8", border: "1.5px solid #7AB648",
+                padding: "5px 11px", borderRadius: 16, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>📱 Gospel Library</a>
+              <a href={v.webUrl} target="_blank" rel="noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                fontSize: 12, fontWeight: 600, color: "#777",
+                background: "#F5F5F5", border: "1.5px solid #DDD",
+                padding: "5px 11px", borderRadius: 16, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>🌐 Browser</a>
+            </div>
+          </div>
         ))}
       </div>
 
-      {/* Bible.com note */}
-      <p style={{
-        fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-        color: "#BBB", textAlign: "center", marginTop: 16, lineHeight: 1.6,
-      }}>
-        All scripture links open in Bible.com (YouVersion) for reliable access.
-        You can also read these in the <strong>Gospel Library app</strong>.
-      </p>
       <div style={{ height: 16 }} />
     </div>
   );
