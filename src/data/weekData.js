@@ -1,7 +1,7 @@
-// ── CFM 2026 Old Testament — Week Database ─────────────────────────────────
-// All YouTube IDs verified via web search
-// Bible.com used for all scripture links (reliable)
-// fallbackUrl on every Church link
+// ── CFM 2026 Old Testament — Full 52-Week Skeleton ──────────────────────────
+// Line Upon Line YouTube IDs sourced from comefollowhimdaily.com (verified)
+// Scripture links use Gospel Library deep links + web fallback
+// Weeks 24-25 are fully built; all others are skeleton with scriptures + LUL video
 
 export const TYPE_CONFIG = {
   scripture:    { color: "#2D5016", bg: "#F0F7E8", border: "#7AB648" },
@@ -15,529 +15,423 @@ export const TYPE_CONFIG = {
   intro:        { color: "#37474F", bg: "#ECEFF1", border: "#90A4AE" },
   review:       { color: "#37474F", bg: "#ECEFF1", border: "#90A4AE" },
   nextweek:     { color: "#1B5E20", bg: "#E8F5E9", border: "#4CAF50" },
+  coming:       { color: "#7B5E00", bg: "#FFF8E1", border: "#FFC107" },
 };
 
+// ── Helper: build a skeleton week ────────────────────────────────────────────
+function skeletonWeek(weekNumber, dateRange, title, scriptureRange, scriptureSummary, lulId, nextTitle) {
+  const [book, chapters] = scriptureRange.split(" ").reduce((a,_,i,arr) =>
+    i === arr.length-1 ? [arr.slice(0,i).join(" "), arr[i]] : a, ["",""]);
+  return {
+    weekNumber, year: 2026, dateRange, title, scriptureRange,
+    theme: `This week's study focuses on ${scriptureRange} — ${scriptureSummary}.`,
+    skeleton: true,
+    days: [
+      {
+        day: 0, label: "Sunday", shortLabel: "Sun",
+        title: "Overview & Invitation", timeEst: "10 min",
+        content: [
+          { type: "intro", icon: "📖", label: "This Week's Focus",
+            text: `This week we study ${scriptureRange}: ${scriptureSummary}. Use Sunday to read the overview and set your intention for the week's study.` },
+          { type: "coming", icon: "🔄", label: "Content Coming Soon",
+            text: `Full daily content for this week (insights, discussion questions, podcast, and conference talks) can be generated using the Update button in Settings. Tap ⚙️ Settings → Generate Week Content.` },
+          ...(lulId ? [{
+            type: "lineUponLine", icon: "🎥", label: "Line Upon Line Overview",
+            title: `${scriptureRange} — Come Follow Me Overview`,
+            description: `Line Upon Line's weekly CFM overview video for ${scriptureRange}. A great Sunday introduction for the whole family.`,
+            embedId: lulId,
+          }] : []),
+        ],
+      },
+      ...["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].map((label, i) => ({
+        day: i+1, label, shortLabel: label.slice(0,3),
+        title: i === 5 ? "Week Reflection" : `Day ${i+1} Study`,
+        timeEst: "10–15 min",
+        content: [
+          i < 5 ? {
+            type: "scripture", icon: "📜", label: "Scripture Reading",
+            reference: scriptureRange,
+            text: `Continue your reading in ${scriptureRange}. ${scriptureSummary}.`,
+            url: `gospellibrary://content/scriptures/ot`,
+            webUrl: `https://www.churchofjesuschrist.org/study/scriptures/ot?lang=eng`,
+          } : {
+            type: "review", icon: "🔄", label: "Week in Review",
+            text: `Reflect on what you studied this week in ${scriptureRange}. What principles stood out? What will you apply?`,
+          },
+          { type: "coming", icon: "🔄", label: "Full Content Coming",
+            text: `Generate full daily content using the Update button in ⚙️ Settings.` },
+          ...(i === 5 && nextTitle ? [{
+            type: "nextweek", icon: "➡️", label: "Coming Next Week",
+            text: `Next week: ${nextTitle}`,
+          }] : []),
+        ],
+      })),
+    ],
+  };
+}
+
+// ── Full week builder (Weeks 24-25 already done, referenced separately) ──────
 export const ALL_CONFERENCE_TALKS = [
-  {
-    id: "nelson-hear-him-2020",
-    title: "Hear Him",
-    speaker: "President Russell M. Nelson",
-    conference: "April 2020",
-    description: "On the Savior's invitation to hear Him — reducing noise and listening for the still small voice.",
+  { id: "nelson-hear-him-2020", title: "Hear Him", speaker: "President Russell M. Nelson",
+    conference: "April 2020", description: "On the Savior's invitation to hear Him — reducing noise and listening for the still small voice.",
     url: "https://www.churchofjesuschrist.org/study/general-conference/2020/04/45nelson",
     fallbackUrl: "https://www.google.com/search?q=%22Hear+Him%22+Russell+Nelson+April+2020+General+Conference",
-    tags: ["holy ghost", "prayer", "elijah", "1 kings"],
-  },
-  {
-    id: "monson-come-follow-me-2013",
-    title: "Come, Follow Me",
-    speaker: "President Thomas S. Monson",
-    conference: "April 2013",
-    description: "On wholehearted discipleship — leaving everything to follow Christ as Elisha did.",
+    tags: ["holy ghost","prayer","elijah","1 kings"] },
+  { id: "monson-come-follow-me-2013", title: "Come, Follow Me", speaker: "President Thomas S. Monson",
+    conference: "April 2013", description: "On wholehearted discipleship — leaving everything to follow Christ as Elisha did.",
     url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/come-follow-me",
-    fallbackUrl: "https://www.google.com/search?q=%22Come+Follow+Me%22+Thomas+Monson+April+2013+General+Conference",
-    tags: ["discipleship", "elisha", "consecration", "1 kings"],
-  },
-  {
-    id: "holland-lord-i-believe-2013",
-    title: "Lord, I Believe",
-    speaker: "Elder Jeffrey R. Holland",
-    conference: "April 2013",
-    description: "On fragile faith and God's tender response — 'Lord, I believe; help thou mine unbelief.'",
+    fallbackUrl: "https://www.google.com/search?q=%22Come+Follow+Me%22+Thomas+Monson+April+2013",
+    tags: ["discipleship","elisha","consecration"] },
+  { id: "holland-lord-i-believe-2013", title: "Lord, I Believe", speaker: "Elder Jeffrey R. Holland",
+    conference: "April 2013", description: "On fragile faith — 'Lord, I believe; help thou mine unbelief.'",
     url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/lord-i-believe",
-    fallbackUrl: "https://www.google.com/search?q=%22Lord+I+Believe%22+Jeffrey+Holland+April+2013+General+Conference",
-    tags: ["faith", "doubt", "2 kings", "elisha"],
-  },
-  {
-    id: "uchtdorf-grateful-2014",
-    title: "Grateful in Any Circumstances",
-    speaker: "President Dieter F. Uchtdorf",
-    conference: "April 2014",
-    description: "On gratitude as a divine principle — choosing thanksgiving in every season of life.",
-    url: "https://www.churchofjesuschrist.org/study/general-conference/2014/04/grateful-in-any-circumstances",
-    fallbackUrl: "https://www.google.com/search?q=%22Grateful+in+Any+Circumstances%22+Uchtdorf+April+2014+General+Conference",
-    tags: ["gratitude", "trust", "adversity"],
-  },
-  {
-    id: "bednar-patterns-of-light-2012",
-    title: "The Spirit of Revelation",
-    speaker: "Elder David A. Bednar",
-    conference: "April 2011",
-    description: "On how revelation comes — incrementally, like the dawn, or suddenly, like switching on a light.",
-    url: "https://www.churchofjesuschrist.org/study/general-conference/2011/04/the-spirit-of-revelation",
-    fallbackUrl: "https://www.google.com/search?q=%22Spirit+of+Revelation%22+Bednar+April+2011+General+Conference",
-    tags: ["revelation", "holy ghost", "prayer", "still small voice"],
-  },
-  {
-    id: "nelson-covenants-2022",
-    title: "The Power of Spiritual Momentum",
-    speaker: "President Russell M. Nelson",
-    conference: "April 2022",
-    description: "On building and keeping spiritual momentum — the power of daily covenant living.",
-    url: "https://www.churchofjesuschrist.org/study/general-conference/2022/04/47nelson",
-    fallbackUrl: "https://www.google.com/search?q=%22Power+of+Spiritual+Momentum%22+Nelson+April+2022+General+Conference",
-    tags: ["covenants", "discipleship", "daily habits"],
-  },
-  {
-    id: "eyring-mountains-to-climb-2012",
-    title: "Mountains to Climb",
-    speaker: "President Henry B. Eyring",
-    conference: "April 2012",
-    description: "On why God allows trials — and how He strengthens us as we climb our mountains.",
+    fallbackUrl: "https://www.google.com/search?q=%22Lord+I+Believe%22+Jeffrey+Holland+April+2013",
+    tags: ["faith","doubt","elisha"] },
+  { id: "eyring-mountains-2012", title: "Mountains to Climb", speaker: "President Henry B. Eyring",
+    conference: "April 2012", description: "On why God allows trials — and how He strengthens us as we climb.",
     url: "https://www.churchofjesuschrist.org/study/general-conference/2012/04/mountains-to-climb",
-    fallbackUrl: "https://www.google.com/search?q=%22Mountains+to+Climb%22+Eyring+April+2012+General+Conference",
-    tags: ["adversity", "faith", "trials", "elijah"],
-  },
-  {
-    id: "oaks-witnesses-2023",
-    title: "The Kingdoms of Glory",
-    speaker: "President Dallin H. Oaks",
-    conference: "April 2023",
-    description: "On the plan of salvation and the kingdoms of glory — foundational doctrine for Old Testament study.",
-    url: "https://www.churchofjesuschrist.org/study/general-conference/2023/04/17oaks",
-    fallbackUrl: "https://www.google.com/search?q=%22Kingdoms+of+Glory%22+Oaks+April+2023+General+Conference",
-    tags: ["plan of salvation", "doctrine", "eternal life"],
-  },
+    fallbackUrl: "https://www.google.com/search?q=%22Mountains+to+Climb%22+Eyring+April+2012",
+    tags: ["adversity","faith","trials","elijah"] },
+  { id: "bednar-spirit-revelation-2011", title: "The Spirit of Revelation", speaker: "Elder David A. Bednar",
+    conference: "April 2011", description: "On how revelation comes — like the dawn or a light switch.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2011/04/the-spirit-of-revelation",
+    fallbackUrl: "https://www.google.com/search?q=%22Spirit+of+Revelation%22+Bednar+April+2011",
+    tags: ["revelation","holy ghost","still small voice"] },
+  { id: "nelson-momentum-2022", title: "The Power of Spiritual Momentum", speaker: "President Russell M. Nelson",
+    conference: "April 2022", description: "On building and keeping spiritual momentum through daily covenant living.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2022/04/47nelson",
+    fallbackUrl: "https://www.google.com/search?q=%22Power+of+Spiritual+Momentum%22+Nelson+April+2022",
+    tags: ["covenants","discipleship","daily habits"] },
+  { id: "holland-place-no-more-2006", title: "Broken Things to Mend", speaker: "Elder Jeffrey R. Holland",
+    conference: "April 2006", description: "On the Savior's healing power for the wounded and weary soul.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2006/04/broken-things-to-mend",
+    fallbackUrl: "https://www.google.com/search?q=%22Broken+Things+to+Mend%22+Holland+April+2006",
+    tags: ["healing","grace","adversity","repentance"] },
+  { id: "uchtdorf-forget-me-not-2011", title: "Forget Me Not", speaker: "President Dieter F. Uchtdorf",
+    conference: "October 2011", description: "Five things to remember about your divine identity and worth.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2011/10/forget-me-not",
+    fallbackUrl: "https://www.google.com/search?q=%22Forget+Me+Not%22+Uchtdorf+October+2011",
+    tags: ["identity","worth","covenant","women"] },
+  { id: "nelson-let-god-prevail-2020", title: "Let God Prevail", speaker: "President Russell M. Nelson",
+    conference: "October 2020", description: "On surrendering our will to God — the covenant of consecration.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2020/10/46nelson",
+    fallbackUrl: "https://www.google.com/search?q=%22Let+God+Prevail%22+Nelson+October+2020",
+    tags: ["consecration","covenant","faith","trust"] },
+  { id: "cook-personal-peace-2013", title: "Personal Peace: The Reward of Righteousness", speaker: "Elder Quentin L. Cook",
+    conference: "April 2013", description: "On finding peace through obedience and covenant living.",
+    url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/personal-peace-the-reward-of-righteousness",
+    fallbackUrl: "https://www.google.com/search?q=%22Personal+Peace%22+Cook+April+2013",
+    tags: ["peace","obedience","righteousness"] },
 ];
 
+// ── Week 24 — Fully Built ─────────────────────────────────────────────────────
+const week24 = {
+  weekNumber: 24, year: 2026, dateRange: "June 8–14, 2026",
+  title: "If the Lord Be God, Follow Him", scriptureRange: "1 Kings 17–19",
+  theme: "Elijah shows us that God provides in drought, speaks in whispers, and restores the burned-out prophet.",
+  days: [
+    { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
+      content: [
+        { type: "intro", icon: "📖", label: "This Week's Focus",
+          text: "This week we study Elijah — one of the most dramatic prophets in the Old Testament. His confrontation with the priests of Baal on Mount Carmel, his collapse under a juniper tree, and God's still small voice are among scripture's most enduring images." },
+        { type: "scripture", icon: "📜", label: "Opening Verse", reference: "1 Kings 18:21",
+          text: "How long halt ye between two opinions? if the Lord be God, follow him: but if Baal, then follow him.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/18.21#p21",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng&id=p21#p21" },
+        { type: "video", icon: "🎬", label: "Week Overview Video", title: "BibleProject: 1-2 Kings Overview",
+          description: "An animated overview of 1–2 Kings — the divided kingdom, Elijah's ministry, and what it all points to.",
+          embedId: "bVFW3wbi9pk" },
+        { type: "question", icon: "💭", label: "Reflection to Carry This Week",
+          text: "Where in your life are you 'halting between two opinions'? What would it mean to more fully follow the Lord this week?",
+          mode: "both" },
+      ] },
+    { day: 1, label: "Monday", shortLabel: "Mon", title: "Ravens & a Widow", timeEst: "12 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "1 Kings 17:1–24",
+          text: "Elijah declares a drought, is fed by ravens at Cherith, then journeys to Zarephath. A widow shares her last meal and her oil never runs dry. Her son dies and Elijah raises him.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/17",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/17?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "Elijah asked the widow to make his cake first — before her own. A test of faith before the miracle. 'The barrel of meal wasted not, neither did the cruse of oil fail' (v. 16). God often asks us to give first, then fills us. When has obedience preceded the blessing in your own life?" },
+        { type: "lineUponLine", icon: "🎥", label: "Scripture Story Video",
+          title: "Elijah and the Widow of Zarephath",
+          description: "A beautifully narrated Bible story video on Elijah's time with the widow — her faith, the miracle of provision, and the raising of her son.",
+          embedId: "3KqbgN4c6KA" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "The widow gave her last resources before the miracle came. What does this pattern teach about how God works — in tithing, service, or acts of trust?", mode: "both" },
+      ] },
+    { day: 2, label: "Tuesday", shortLabel: "Tue", title: "Fire from Heaven", timeEst: "13 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "1 Kings 18:1–40",
+          text: "Elijah confronts 450 priests of Baal on Mount Carmel. He repairs the broken altar with 12 stones, drenches it with water, prays — and fire falls from heaven.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/18",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "Before calling down fire, Elijah 'repaired the altar of the Lord that was broken down' (18:30), using 12 stones — one for each tribe. What broken altars in your life might need repairing before the fire can fall?" },
+        { type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
+          title: "1 Kings 17–19: Elijah",
+          description: "The Follow Him team explores the ancient context of Baal worship, Elijah's altar repair, and what Mount Carmel teaches about unwavering faith.",
+          podcastUrl: "https://followhimpodcast.com",
+          spotifyUrl: "https://open.spotify.com/show/2dnak4SBEaUyWM9BBqZi9X",
+          appleUrl: "https://podcasts.apple.com/us/podcast/follow-him-a-come-follow-me-podcast/id1457038461",
+          note: "Suggested: first 20 minutes" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "What divided loyalties do people face today? How does repairing our personal altar help us recommit fully to God?", mode: "both" },
+      ] },
+    { day: 3, label: "Wednesday", shortLabel: "Wed", title: "Into the Wilderness", timeEst: "15 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "1 Kings 19:1–18",
+          text: "After his greatest victory, Elijah flees Jezebel, collapses under a juniper tree. An angel feeds him twice. He travels to Horeb and hears the still small voice.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/19",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "After his greatest triumph, Elijah burned out completely. God's response was not rebuke — it was food, water, and rest. He met Elijah's physical needs before his spiritual ones. There is profound wisdom here for how we care for ourselves and others in wilderness seasons." },
+        { type: "conference", icon: "🏛️", label: "General Conference",
+          title: "Mountains to Climb", speaker: "President Henry B. Eyring", conference: "April 2012 General Conference",
+          description: "President Eyring on why God allows difficult seasons — and how He strengthens us through them.",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2012/04/mountains-to-climb",
+          fallbackUrl: "https://www.google.com/search?q=%22Mountains+to+Climb%22+Eyring+April+2012+General+Conference" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "The angel said 'the journey is too great for thee.' When has God sent someone to strengthen you in a wilderness moment? How do we become that angel for others?", mode: "both" },
+      ] },
+    { day: 4, label: "Thursday", shortLabel: "Thu", title: "Still Small Voice", timeEst: "12 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Key Verses", reference: "1 Kings 19:11–12",
+          text: "Behold, the Lord passed by... but the Lord was not in the wind... not in the earthquake... not in the fire: and after the fire a still small voice.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/19.11#p11",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p11#p11" },
+        { type: "conference", icon: "🏛️", label: "General Conference",
+          title: "Hear Him", speaker: "President Russell M. Nelson", conference: "April 2020 General Conference",
+          description: "President Nelson's landmark talk on the Savior's invitation to hear Him — and our need to reduce noise and listen as Elijah listened.",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2020/04/45nelson",
+          fallbackUrl: "https://www.google.com/search?q=%22Hear+Him%22+Russell+Nelson+April+2020" },
+        { type: "question", icon: "💭", label: "Personal Reflection",
+          text: "What noise in your life makes it hardest to hear God's still small voice? What one thing could you change this week?", mode: "personal" },
+        { type: "question", icon: "👨‍👩‍👧", label: "Family Discussion",
+          text: "Ask each family member: If God spoke to you right now in a still small voice, what do you think He might say?", mode: "family" },
+      ] },
+    { day: 5, label: "Friday", shortLabel: "Fri", title: "Elisha Called", timeEst: "10 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "1 Kings 19:19–21",
+          text: "Elijah casts his mantle upon Elisha, who immediately sacrifices his oxen, burns his equipment, and follows — leaving no way back.",
+          url: "gospellibrary://content/scriptures/ot/1-kgs/19.19#p19",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p19#p19" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "Elisha burned his plowing equipment — a deliberate act that eliminated retreat. Full discipleship means removing our own escape hatches. Not burning our skills, but surrendering our fallback plans to God." },
+        { type: "conference", icon: "🏛️", label: "General Conference",
+          title: "Come, Follow Me", speaker: "President Thomas S. Monson", conference: "April 2013 General Conference",
+          description: "President Monson on wholehearted discipleship — leaving everything to follow Christ, as Elisha responded when the mantle fell.",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/come-follow-me",
+          fallbackUrl: "https://www.google.com/search?q=%22Come+Follow+Me%22+Thomas+Monson+April+2013" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "What 'oxen and equipment' might God be asking you to release? What does consecrated discipleship look like in everyday life?", mode: "both" },
+      ] },
+    { day: 6, label: "Saturday", shortLabel: "Sat", title: "Week Reflection", timeEst: "10 min",
+      content: [
+        { type: "review", icon: "🔄", label: "Week in Review",
+          text: "This week you walked with Elijah through drought and provision, fire and burnout, wilderness and the still small voice. You saw God feed a burned-out prophet and whisper to him in the quiet." },
+        { type: "question", icon: "💭", label: "Personal Reflection",
+          text: "Which moment in Elijah's story resonated most with where you are right now? What one truth do you want to carry forward?", mode: "personal" },
+        { type: "question", icon: "👨‍👩‍👧", label: "Family Council",
+          text: "What does your family altar look like — the covenant habits that keep you centered on God? Is there anything that needs repairing together?", mode: "family" },
+        { type: "nextweek", icon: "➡️", label: "Coming Next Week",
+          text: "Next week: 2 Kings 2–7 — Elisha receives the mantle, parts the Jordan, heals Naaman, and multiplies a widow's oil." },
+      ] },
+  ],
+};
+
+// ── Week 25 — Fully Built ─────────────────────────────────────────────────────
+const week25 = {
+  weekNumber: 25, year: 2026, dateRange: "June 15–21, 2026",
+  title: "There Is a Prophet in Israel", scriptureRange: "2 Kings 2–7",
+  theme: "Elisha inherits Elijah's mantle and performs miracles pointing forward to Christ.",
+  days: [
+    { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
+      content: [
+        { type: "intro", icon: "📖", label: "This Week's Focus",
+          text: "Elisha steps into his calling and the miracles multiply — a divided Jordan, a widow's bottomless oil, a Syrian general humbled into healing, and an army of heaven made visible." },
+        { type: "scripture", icon: "📜", label: "Opening Verse", reference: "2 Kings 5:8",
+          text: "It shall come to pass, when he cometh to thee, that he shall know that there is a prophet in Israel.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/5.8#p8",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng&id=p8#p8" },
+        { type: "lineUponLine", icon: "🎥", label: "Line Upon Line Overview",
+          title: "Elisha Takes Elijah's Mantle | Naaman Healed",
+          description: "Lego-style Come Follow Me overview covering 2 Kings 2–5 — Elisha receiving the mantle, the widow's oil, and Naaman's healing.",
+          embedId: "w1sGe6c0bcU" },
+        { type: "question", icon: "💭", label: "Reflection to Carry This Week",
+          text: "Naaman expected a dramatic healing but was asked to do something simple and humble. Where might God be asking you to do something simple that your pride is resisting?", mode: "both" },
+      ] },
+    { day: 1, label: "Monday", shortLabel: "Mon", title: "The Mantle Falls", timeEst: "11 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "2 Kings 2:1–15",
+          text: "Elijah is taken up in a whirlwind of fire. Elisha picks up the fallen mantle, strikes the Jordan — and it parts.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/2",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "Elisha's first act with the mantle was to ask: 'Where is the Lord God of Elijah?' The right question after any spiritual inheritance is not 'what can I do?' but 'where is God in this?'" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "What spiritual mantles have you received — through family, a mentor, a blessing, or a calling? How are you carrying them forward?", mode: "both" },
+      ] },
+    { day: 2, label: "Tuesday", shortLabel: "Tue", title: "A Widow's Oil", timeEst: "11 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "2 Kings 4:1–7",
+          text: "A widow has only a pot of oil. Elisha tells her to gather empty vessels — as many as she can. The oil flows until there are no more vessels to fill.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/4",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "The oil stopped only when she ran out of vessels. God's abundance was not limited by His capacity but by hers. The number of empty vessels she brought determined how much she received." },
+        { type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
+          title: "2 Kings 2–7: Elisha's Miracles",
+          description: "The Follow Him team unpacks the miracle patterns in Elisha's ministry and how each points forward to Christ's healing power.",
+          podcastUrl: "https://followhimpodcast.com",
+          spotifyUrl: "https://open.spotify.com/show/2dnak4SBEaUyWM9BBqZi9X",
+          appleUrl: "https://podcasts.apple.com/us/podcast/follow-him-a-come-follow-me-podcast/id1457038461",
+          note: "Suggested: first 20 minutes" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "What empty vessels are you bringing to God right now? How does this story change how you think about asking for blessings?", mode: "both" },
+      ] },
+    { day: 3, label: "Wednesday", shortLabel: "Wed", title: "Naaman the Syrian", timeEst: "14 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "2 Kings 5:1–19",
+          text: "Naaman, a great general with leprosy, travels to Elisha expecting drama. Elisha sends a messenger: dip in the Jordan seven times. Naaman almost turns back in pride — but obeys and is healed.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/5",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "Naaman's servants said: 'If the prophet had bid thee do some great thing, wouldest thou not have done it?' The Jordan was muddy and ordinary. God often asks us to do simple, undramatic things — and we resist because we expect something grander." },
+        { type: "lineUponLine", icon: "🎥", label: "Scripture Story Video",
+          title: "Elisha Heals Naaman | A Story About Obedience",
+          description: "Living Scriptures Come Follow Me video on Naaman's healing — pride, humility, and the miracle of obedience.",
+          embedId: "WzKf2nE9h7A" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "What 'muddy Jordan' — simple, humble act of obedience — might God be asking of you that your pride resists?", mode: "both" },
+      ] },
+    { day: 4, label: "Thursday", shortLabel: "Thu", title: "Eyes to See", timeEst: "11 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Key Passage", reference: "2 Kings 6:15–17",
+          text: "The servant cried 'how shall we do?' And Elisha prayed: Lord, open his eyes. And the Lord opened the young man's eyes; and behold, the mountain was full of horses and chariots of fire.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/6.15#p15",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/6?lang=eng&id=p15#p15" },
+        { type: "conference", icon: "🏛️", label: "General Conference",
+          title: "Lord, I Believe", speaker: "Elder Jeffrey R. Holland", conference: "April 2013 General Conference",
+          description: "Elder Holland on fragile faith and God's tender response — 'Lord, I believe; help thou mine unbelief.'",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/lord-i-believe",
+          fallbackUrl: "https://www.google.com/search?q=%22Lord+I+Believe%22+Jeffrey+Holland+April+2013" },
+        { type: "question", icon: "💭", label: "Personal Reflection",
+          text: "Where do you need your spiritual eyes opened right now? What would you see differently if you could see the chariots of fire around you?", mode: "personal" },
+        { type: "question", icon: "👨‍👩‍👧", label: "Family Discussion",
+          text: "Can you think of times God protected your family that you only recognized later? How can you train yourselves to see His hand more readily?", mode: "family" },
+      ] },
+    { day: 5, label: "Friday", shortLabel: "Fri", title: "It Is Well", timeEst: "10 min",
+      content: [
+        { type: "scripture", icon: "📜", label: "Scripture Reading", reference: "2 Kings 4:8–37",
+          text: "The Shunammite woman's promised son dies. When asked if all is well, she says simply: 'It is well.' Elisha raises the boy from the dead.",
+          url: "gospellibrary://content/scriptures/ot/2-kgs/4.8#p8",
+          webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng&id=p8#p8" },
+        { type: "insight", icon: "💡", label: "Study Insight",
+          text: "'It is well' — spoken while her son lay dead — is one of the great declarations of faith in scripture. She had not denied the crisis. She had chosen where her trust resided." },
+        { type: "conference", icon: "🏛️", label: "General Conference",
+          title: "The Spirit of Revelation", speaker: "Elder David A. Bednar", conference: "April 2011 General Conference",
+          description: "Elder Bednar on how God communicates — incrementally like the dawn, or suddenly like a light switch. Both require faith to keep moving forward.",
+          url: "https://www.churchofjesuschrist.org/study/general-conference/2011/04/the-spirit-of-revelation",
+          fallbackUrl: "https://www.google.com/search?q=%22Spirit+of+Revelation%22+Bednar+April+2011" },
+        { type: "question", icon: "💭", label: "Discussion Question",
+          text: "'It is well.' Have you ever been able to say this while still in the middle of the trial? What made that possible?", mode: "both" },
+      ] },
+    { day: 6, label: "Saturday", shortLabel: "Sat", title: "Week Reflection", timeEst: "10 min",
+      content: [
+        { type: "review", icon: "🔄", label: "Week in Review",
+          text: "You saw Elisha pick up a fallen mantle faithfully. You watched God multiply a widow's last jar of oil. You saw a proud general humbled into healing. You saw an army of heaven already surrounding a frightened servant." },
+        { type: "question", icon: "💭", label: "Personal Reflection",
+          text: "Which of Elisha's miracles speaks most directly to your life right now? What empty vessel are you bringing to God this week?", mode: "personal" },
+        { type: "question", icon: "👨‍👩‍👧", label: "Family Council",
+          text: "Which miracle felt most personal this week? How can your family cultivate the 'It is well' faith of the Shunammite woman?", mode: "family" },
+        { type: "nextweek", icon: "➡️", label: "Coming Next Week",
+          text: "Next week: Isaiah 1–12 — We enter Isaiah. The vision of Zion, the call of the prophet, the Immanuel prophecy, and the Branch." },
+      ] },
+  ],
+};
+
+// ── All 52 Weeks ──────────────────────────────────────────────────────────────
 export const WEEKS = [
-  {
-    weekNumber: 24,
-    year: 2026,
-    dateRange: "June 8–14, 2026",
-    title: "If the Lord Be God, Follow Him",
-    scriptureRange: "1 Kings 17–19",
-    theme: "Elijah shows us that God provides in drought, speaks in whispers, and restores the burned-out prophet.",
-    days: [
-      {
-        day: 0, label: "Sunday", shortLabel: "Sun",
-        title: "Overview & Invitation", timeEst: "10 min",
-        content: [
-          {
-            type: "intro", icon: "📖", label: "This Week's Focus",
-            text: "This week we study Elijah — one of the most dramatic prophets in the Old Testament. His confrontation with the priests of Baal on Mount Carmel, his collapse under a juniper tree, and God's still small voice are among scripture's most enduring images.",
-          },
-          {
-            type: "scripture", icon: "📜", label: "Opening Verse",
-            reference: "1 Kings 18:21",
-            text: "How long halt ye between two opinions? if the Lord be God, follow him: but if Baal, then follow him.",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/18.21#p21", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng&id=p21#p21",
-          },
-          {
-            // BibleProject 1-2 Kings — ID verified: bVFW3wbi9pk
-            type: "video", icon: "🎬", label: "Week Overview Video",
-            title: "BibleProject: 1-2 Kings Overview",
-            description: "An 8-minute animated overview of 1–2 Kings — the divided kingdom, Elijah's ministry, and what it all points to.",
-            embedId: "bVFW3wbi9pk",
-          },
-          {
-            type: "question", icon: "💭", label: "Reflection to Carry This Week",
-            text: "Where in your life are you 'halting between two opinions'? What would it mean to more fully follow the Lord this week?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 1, label: "Monday", shortLabel: "Mon",
-        title: "Ravens & a Widow", timeEst: "12 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "1 Kings 17:1–24",
-            text: "Elijah declares a drought, is fed by ravens at Cherith, then journeys to Zarephath. A widow shares her last meal and her barrel of meal and cruse of oil never run dry. Her son dies and Elijah raises him.",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/17", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/17?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "Elijah asked the widow to make his cake first — before her own. It was a test of faith before the miracle. The barrel of meal wasted not, neither did the cruse of oil fail (v. 16). God often asks us to give first, then fills us abundantly. When has obedience preceded the blessing in your own life?",
-          },
-          {
-            // Grace Digital Network - Elijah and the Widow — ID: 3KqbgN4c6KA verified
-            type: "lineUponLine", icon: "🎥", label: "Scripture Story Video",
-            title: "Elijah and the Widow of Zarephath",
-            description: "A beautifully narrated Bible story video on Elijah's time with the widow — her faith, the miracle of provision, and the raising of her son.",
-            embedId: "3KqbgN4c6KA",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "The widow gave her last resources before the miracle came. What does this pattern teach about how God works — in tithing, service, or acts of trust?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 2, label: "Tuesday", shortLabel: "Tue",
-        title: "Fire from Heaven", timeEst: "13 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "1 Kings 18:1–40",
-            text: "Elijah confronts 450 priests of Baal on Mount Carmel. He repairs the broken altar with 12 stones, drenches it with water, prays — and fire falls from heaven. The people cry: 'The Lord, he is the God.'",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/18", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/18?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "Before calling down fire, Elijah 'repaired the altar of the Lord that was broken down' (18:30), using 12 stones — one for each tribe of Israel. Spiritual power often follows restoration. What broken altars — covenant habits, family traditions, daily prayer — might need repairing before the fire can fall in your life?",
-          },
-          {
-            type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
-            title: "1 Kings 17–19: Elijah",
-            description: "The Follow Him team explores the ancient context of Baal worship, the covenant significance of Elijah's altar repair, and what the Mount Carmel confrontation teaches about unwavering faith.",
-            podcastUrl: "https://followhimpodcast.com",
-            spotifyUrl: "https://open.spotify.com/show/2dnak4SBEaUyWM9BBqZi9X",
-            appleUrl: "https://podcasts.apple.com/us/podcast/follow-him-a-come-follow-me-podcast/id1457038461",
-            note: "Suggested: first 20 minutes",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "Elijah asks 'How long halt ye between two opinions?' What divided loyalties do people face today? How does repairing our personal altar help us recommit fully to God?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 3, label: "Wednesday", shortLabel: "Wed",
-        title: "Into the Wilderness", timeEst: "15 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "1 Kings 19:1–18",
-            text: "After his greatest victory, Elijah flees Jezebel, collapses under a juniper tree, and asks to die. An angel feeds him twice. He travels 40 days to Horeb, hides in a cave. God meets him — not in wind, earthquake, or fire, but in a still small voice.",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/19", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "After his greatest triumph, Elijah burned out completely. God's response was not rebuke — it was food, water, and rest. He met Elijah's physical needs before his spiritual ones. The angel said: 'Arise and eat; because the journey is too great for thee.' There is profound wisdom here for how we care for ourselves and others during wilderness seasons.",
-          },
-          {
-            type: "conference", icon: "🏛️", label: "General Conference",
-            title: "Mountains to Climb",
-            speaker: "President Henry B. Eyring",
-            conference: "April 2012 General Conference",
-            description: "President Eyring on why God allows difficult seasons — and how He strengthens us through them. A perfect companion to Elijah's experience under the juniper tree.",
-            url: "https://www.churchofjesuschrist.org/study/general-conference/2012/04/mountains-to-climb",
-            fallbackUrl: "https://www.google.com/search?q=%22Mountains+to+Climb%22+Eyring+April+2012+General+Conference",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "The angel said 'the journey is too great for thee.' When has God sent someone to feed, rest, or strengthen you in a wilderness moment? How do we become that angel for others?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 4, label: "Thursday", shortLabel: "Thu",
-        title: "Still Small Voice", timeEst: "12 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Key Verses",
-            reference: "1 Kings 19:11–12",
-            text: "Behold, the Lord passed by, and a great and strong wind rent the mountains... but the Lord was not in the wind: and after the wind an earthquake; but the Lord was not in the earthquake: and after the earthquake a fire; but the Lord was not in the fire: and after the fire a still small voice.",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/19.11#p11", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p11#p11",
-          },
-          {
-            type: "conference", icon: "🏛️", label: "General Conference",
-            title: "Hear Him",
-            speaker: "President Russell M. Nelson",
-            conference: "April 2020 General Conference",
-            description: "President Nelson's landmark talk on the Savior's invitation to 'Hear Him' — and our need to reduce noise, still our minds, and listen as Elijah listened for the voice that came after the storm.",
-            url: "https://www.churchofjesuschrist.org/study/general-conference/2020/04/45nelson",
-            fallbackUrl: "https://www.google.com/search?q=%22Hear+Him%22+Russell+Nelson+April+2020+General+Conference",
-          },
-          {
-            type: "question", icon: "💭", label: "Personal Reflection",
-            text: "God was not in the wind, earthquake, or fire — but in the still small voice. What noise in your life makes it hardest to hear that voice? What one thing could you change this week?",
-            mode: "personal",
-          },
-          {
-            type: "question", icon: "👨‍👩‍👧", label: "Family Discussion",
-            text: "Ask each family member: If God spoke to you right now in a still small voice, what do you think He might say? What helps our family feel close enough to God to hear Him?",
-            mode: "family",
-          },
-        ],
-      },
-      {
-        day: 5, label: "Friday", shortLabel: "Fri",
-        title: "Elisha Called", timeEst: "10 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "1 Kings 19:19–21",
-            text: "Elijah finds Elisha plowing with twelve yoke of oxen. He casts his mantle upon him. Elisha immediately sacrifices his oxen, burns his plowing equipment, and follows — leaving no way back.",
-            url: "gospellibrary://content/scriptures/ot/1-kgs/19.19#p19", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/19?lang=eng&id=p19#p19",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "Elisha burned his plowing equipment — a deliberate act that eliminated retreat. Compare Matthew 4:20: 'They straightway left their nets, and followed him.' Full discipleship means removing our own escape hatches. Not burning our skills, but surrendering our fallback plans to God.",
-          },
-          {
-            type: "conference", icon: "🏛️", label: "General Conference",
-            title: "Come, Follow Me",
-            speaker: "President Thomas S. Monson",
-            conference: "April 2013 General Conference",
-            description: "President Monson on the pattern of wholehearted discipleship — leaving everything to follow Christ, as illustrated by Elisha's immediate response when the mantle fell.",
-            url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/come-follow-me",
-            fallbackUrl: "https://www.google.com/search?q=%22Come+Follow+Me%22+Thomas+Monson+April+2013+General+Conference",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "Elisha left everything without hesitation. What does consecrated discipleship look like in everyday modern life? What 'oxen and equipment' might God be asking you to release?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 6, label: "Saturday", shortLabel: "Sat",
-        title: "Week Reflection", timeEst: "10 min",
-        content: [
-          {
-            type: "review", icon: "🔄", label: "Week in Review",
-            text: "This week you walked with Elijah through drought and miraculous provision, through fire and total burnout, through wilderness and the still small voice. You saw God feed a burned-out prophet and whisper to him in the quiet. You watched a new prophet answer his call without looking back.",
-          },
-          {
-            type: "question", icon: "💭", label: "Personal Reflection",
-            text: "Which moment in Elijah's story resonated most with where you are right now? What one truth from this week do you want to carry into next week?",
-            mode: "personal",
-          },
-          {
-            type: "question", icon: "👨‍👩‍👧", label: "Family Council",
-            text: "As a family: What does your family altar look like — the covenant habits that keep you centered on God? Is there anything that needs repairing or renewing together this week?",
-            mode: "family",
-          },
-          {
-            type: "nextweek", icon: "➡️", label: "Coming Next Week",
-            text: "Next week: 2 Kings 2–7 — Elisha receives Elijah's mantle, parts the Jordan, heals Naaman the Syrian, and multiplies a widow's oil. Themes: spiritual inheritance, humility, and abundance from nothing.",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    weekNumber: 25,
-    year: 2026,
-    dateRange: "June 15–21, 2026",
-    title: "There Is a Prophet in Israel",
-    scriptureRange: "2 Kings 2–7",
-    theme: "Elisha inherits Elijah's mantle and performs miracles pointing forward to Christ — healing, provision, and seeing beyond the veil.",
-    days: [
-      {
-        day: 0, label: "Sunday", shortLabel: "Sun",
-        title: "Overview & Invitation", timeEst: "10 min",
-        content: [
-          {
-            type: "intro", icon: "📖", label: "This Week's Focus",
-            text: "Elisha steps into his calling and the miracles multiply — a divided Jordan, a widow's bottomless oil, a Syrian general humbled into healing, and an army of heaven made visible. Each miracle points forward to the Savior.",
-          },
-          {
-            type: "scripture", icon: "📜", label: "Opening Verse",
-            reference: "2 Kings 5:8",
-            text: "It shall come to pass, when he cometh to thee, that he shall know that there is a prophet in Israel.",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/5.8#p8", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng&id=p8#p8",
-          },
-          {
-            // BibleProject 1-2 Kings same video — covers both books, ID: bVFW3wbi9pk verified
-            type: "video", icon: "🎬", label: "Week Overview Video",
-            title: "BibleProject: 1-2 Kings Overview",
-            description: "This BibleProject overview covers Elisha's full ministry in 2 Kings — spiritual inheritance, healing, and the coming exile.",
-            embedId: "bVFW3wbi9pk",
-          },
-          {
-            type: "question", icon: "💭", label: "Reflection to Carry This Week",
-            text: "Naaman expected a dramatic healing but was asked to do something simple and humble. Where might God be asking you to do something simple that your pride is resisting?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 1, label: "Monday", shortLabel: "Mon",
-        title: "The Mantle Falls", timeEst: "11 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "2 Kings 2:1–15",
-            text: "Elijah is taken up in a whirlwind of fire. Elisha watches, picks up the fallen mantle, strikes the Jordan — and it parts. The other prophets say: 'The spirit of Elijah doth rest on Elisha.'",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/2", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "The mantle — Elijah's outer cloak — became the symbol of prophetic authority passed to Elisha. When we receive priesthood ordinations, temple covenants, or sacred callings, we receive a kind of mantle. Elisha's first act with it was to ask: 'Where is the Lord God of Elijah?' The right question after any spiritual inheritance is not 'what can I do?' but 'where is God in this?'",
-          },
-          {
-            // Lego Come Follow Me 2 Kings — ID: w1sGe6c0bcU verified
-            type: "lineUponLine", icon: "🎥", label: "Come Follow Me Video",
-            title: "Naaman Healed | Elisha Takes Elijah's Mantle",
-            description: "A fun and faithful Lego-style Come Follow Me video covering 2 Kings 2–5 — Elisha receiving the mantle and Naaman's healing.",
-            embedId: "w1sGe6c0bcU",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "What spiritual mantles have you received — through your family, a mentor, a blessing, or a calling? How are you carrying them forward?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 2, label: "Tuesday", shortLabel: "Tue",
-        title: "A Widow's Oil", timeEst: "11 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "2 Kings 4:1–7",
-            text: "A widow with debts about to lose her sons to slavery has only a pot of oil. Elisha tells her to gather empty vessels — as many as she can. She fills every one. The oil stops only when there are no more vessels to fill.",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/4", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "The oil stopped only when she ran out of vessels to fill. God's abundance was not limited by His capacity but by hers. This is a profound spiritual principle: the number of empty vessels she gathered determined how much she received. Our preparation, faith, and willingness to bring our emptiness to God shapes how much of His grace we can hold.",
-          },
-          {
-            type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
-            title: "2 Kings 2–7: Elisha's Miracles",
-            description: "The Follow Him team unpacks the miracle patterns in Elisha's ministry — the widow's oil, Naaman, the army of heaven — and how each points forward to Christ.",
-            podcastUrl: "https://followhimpodcast.com",
-            spotifyUrl: "https://open.spotify.com/show/2dnak4SBEaUyWM9BBqZi9X",
-            appleUrl: "https://podcasts.apple.com/us/podcast/follow-him-a-come-follow-me-podcast/id1457038461",
-            note: "Suggested: first 20 minutes",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "What empty vessels are you bringing to God right now — areas of need, openness, or faith? How does this story change how you think about asking for blessings?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 3, label: "Wednesday", shortLabel: "Wed",
-        title: "Naaman the Syrian", timeEst: "14 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "2 Kings 5:1–19",
-            text: "Naaman, a great Syrian general with leprosy, travels to Elisha expecting drama. Elisha sends a messenger: dip in the Jordan seven times. Naaman almost turns back in pride. His servants persuade him. He dips seven times and is healed — his flesh 'like unto the flesh of a little child.'",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/5", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/5?lang=eng",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "Naaman's servants said: 'If the prophet had bid thee do some great thing, wouldest thou not have done it?' (v.13). The Jordan was muddy and ordinary. God often asks us to do simple, undramatic things — attend church, read scriptures, keep small commitments — and we resist because we expect something grander. Healing comes through humble, repeated obedience.",
-          },
-          {
-            // Living Scriptures: Elisha Heals Naaman — ID: WzKf2nE9h7A verified
-            type: "lineUponLine", icon: "🎥", label: "Scripture Story Video",
-            title: "Elisha Heals Naaman | A Story About Obedience",
-            description: "Living Scriptures Come Follow Me video on Naaman's healing — pride, humility, and the miracle of obedience.",
-            embedId: "WzKf2nE9h7A",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "What 'muddy Jordan' — simple, humble act of obedience — might God be asking of you that your pride resists? What would it look like to just dip seven times?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 4, label: "Thursday", shortLabel: "Thu",
-        title: "Eyes to See", timeEst: "11 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Key Passage",
-            reference: "2 Kings 6:15–17",
-            text: "When Elisha's servant saw the enemy army surrounding them, he cried 'Alas, my master! how shall we do?' And Elisha prayed: Lord, open his eyes, that he may see. And the Lord opened the young man's eyes; and behold, the mountain was full of horses and chariots of fire round about Elisha.",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/6.15#p15", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/6?lang=eng&id=p15#p15",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "The army of heaven was already there — the servant simply couldn't see it yet. Our prayers and ordinances don't summon God's protection; they open our eyes to what was always present. Faith is not wishful thinking — it's learning to perceive what is real but currently invisible.",
-          },
-          {
-            type: "conference", icon: "🏛️", label: "General Conference",
-            title: "Lord, I Believe",
-            speaker: "Elder Jeffrey R. Holland",
-            conference: "April 2013 General Conference",
-            description: "Elder Holland on fragile faith and God's tender response to 'Lord, I believe; help thou mine unbelief' — the kind of faith Elisha's servant needed when his eyes were finally opened.",
-            url: "https://www.churchofjesuschrist.org/study/general-conference/2013/04/lord-i-believe",
-            fallbackUrl: "https://www.google.com/search?q=%22Lord+I+Believe%22+Jeffrey+Holland+April+2013+General+Conference",
-          },
-          {
-            type: "question", icon: "💭", label: "Personal Reflection",
-            text: "Where do you need your spiritual eyes opened right now? What would you see differently about your current situation if you could see the 'chariots of fire' surrounding you?",
-            mode: "personal",
-          },
-          {
-            type: "question", icon: "👨‍👩‍👧", label: "Family Discussion",
-            text: "Can you think of times God protected or helped your family that you only recognized later? How can you train yourselves to see His hand more readily?",
-            mode: "family",
-          },
-        ],
-      },
-      {
-        day: 5, label: "Friday", shortLabel: "Fri",
-        title: "It Is Well", timeEst: "10 min",
-        content: [
-          {
-            type: "scripture", icon: "📜", label: "Scripture Reading",
-            reference: "2 Kings 4:8–37",
-            text: "The Shunammite woman builds a room for Elisha. Her promised son is given and then dies suddenly. She rides to Elisha — and when asked if all is well, says simply: 'It is well.' Elisha raises the boy from the dead.",
-            url: "gospellibrary://content/scriptures/ot/2-kgs/4.8#p8", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/4?lang=eng&id=p8#p8",
-          },
-          {
-            type: "insight", icon: "💡", label: "Study Insight",
-            text: "'It is well' — spoken while her son lay dead at home — is one of the great declarations of faith in all scripture. She had not denied the crisis. She had chosen where her trust resided. Faith doesn't require us to pretend things are fine; it requires us to know where we are taking our grief.",
-          },
-          {
-            type: "conference", icon: "🏛️", label: "General Conference",
-            title: "The Spirit of Revelation",
-            speaker: "Elder David A. Bednar",
-            conference: "April 2011 General Conference",
-            description: "Elder Bednar on how God communicates with us — incrementally like the dawn, or suddenly like a light switch. Both require us to keep our eyes open and moving forward in faith.",
-            url: "https://www.churchofjesuschrist.org/study/general-conference/2011/04/the-spirit-of-revelation",
-            fallbackUrl: "https://www.google.com/search?q=%22Spirit+of+Revelation%22+Bednar+April+2011+General+Conference",
-          },
-          {
-            type: "question", icon: "💭", label: "Discussion Question",
-            text: "'It is well.' Have you ever been able to say this — trusting God while still in the middle of the trial? What made that possible? What does it take to get to that place?",
-            mode: "both",
-          },
-        ],
-      },
-      {
-        day: 6, label: "Saturday", shortLabel: "Sat",
-        title: "Week Reflection", timeEst: "10 min",
-        content: [
-          {
-            type: "review", icon: "🔄", label: "Week in Review",
-            text: "This week you saw Elisha pick up a fallen mantle and carry it faithfully. You watched God multiply a widow's last jar of oil. You saw a proud general humbled into healing. You saw an army of heaven already surrounding a frightened servant. You heard a grieving mother say 'It is well.'",
-          },
-          {
-            type: "question", icon: "💭", label: "Personal Reflection",
-            text: "Which of Elisha's miracles speaks most directly to your life right now? What empty vessel are you bringing to God this week?",
-            mode: "personal",
-          },
-          {
-            type: "question", icon: "👨‍👩‍👧", label: "Family Council",
-            text: "As a family: Which miracle felt most personal this week and why? How can your family cultivate the 'It is well' faith of the Shunammite woman?",
-            mode: "family",
-          },
-          {
-            type: "nextweek", icon: "➡️", label: "Coming Next Week",
-            text: "Next week: Isaiah 1–12 — We enter Isaiah. The vision of Zion, the call of the prophet, the Immanuel prophecy, and the Branch. The most-quoted prophet in the Book of Mormon begins.",
-          },
-        ],
-      },
-    ],
-  },
+  skeletonWeek(1,  "Dec 29–Jan 4, 2026",   "Introduction to the Old Testament", "Introduction to the Old Testament", "an overview of the Old Testament and its witness of Jesus Christ", null, "Moses 1; Abraham 3 — 'This Is My Work and My Glory'"),
+  skeletonWeek(2,  "January 5–11, 2026",   "This Is My Work and My Glory",      "Moses 1; Abraham 3",   "God's grand vision of His work and the premortal life", null, "The Creation"),
+  skeletonWeek(3,  "January 12–18, 2026",  "The Creation",                       "Genesis 1–2; Moses 2–3; Abraham 4–5", "the Creation and our role as God's children", null, "Adam and Eve"),
+  skeletonWeek(4,  "January 19–25, 2026",  "Adam and Eve",                       "Genesis 3–4; Moses 4–5", "the Fall and the plan of redemption", "6i1gwgNZX1k", "Enoch and the City of Zion"),
+  skeletonWeek(5,  "Jan 26–Feb 1, 2026",   "Enoch and the City of Zion",        "Genesis 5; Moses 6",   "Enoch's walk with God and the building of Zion", "Nry1kYw7dAo", "The Megavision of Enoch"),
+  skeletonWeek(6,  "February 2–8, 2026",   "The Megavision of Enoch",           "Moses 7",              "Enoch's vision of God weeping and the redemption of Zion", "ZKZoXR_pBLo", "Noah and the Flood"),
+  skeletonWeek(7,  "February 9–15, 2026",  "Noah and the Flood",                "Genesis 6–11; Moses 8", "the covenant with Noah and the tower of Babel", "iJHru0_bUJI", "The Abrahamic Covenant"),
+  skeletonWeek(8,  "February 16–22, 2026", "The Abrahamic Covenant",            "Genesis 12–17; Abraham 1–2", "Abraham's call and the covenant of endless posterity", "_AzLaRWvqOg", "Sarah and Isaac"),
+  skeletonWeek(9,  "Feb 23–Mar 1, 2026",   "Is Any Thing Too Hard for the Lord?","Genesis 18–23",       "Sarah's laughter, the destruction of Sodom, and the Abrahamic sacrifice", "jzLRfH2VC34", "Jacob and Esau"),
+  skeletonWeek(10, "March 2–8, 2026",      "Jacob and Esau",                    "Genesis 24–33",        "Isaac, Rebekah, Jacob's ladder, and the covenant passing to a new generation", "S2QEXPrXuhw", "Joseph in Egypt"),
+  skeletonWeek(11, "March 9–15, 2026",     "Joseph in Egypt",                   "Genesis 37–41",        "Joseph's coat of many colors, Potiphar's house, and his rise in Egypt", "M-vDrXFdbUI", "Joseph — A Type of Christ"),
+  skeletonWeek(12, "March 16–22, 2026",    "Joseph — A Type of Christ",         "Genesis 42–50",        "Joseph revealing himself to his brothers and the reunion of Israel's family", "ia61zgwiy30", "A Prophet Is Born"),
+  skeletonWeek(13, "March 23–29, 2026",    "A Prophet Is Born",                 "Exodus 1–6",           "Moses' birth, the burning bush, and the great I AM", "fK2M9zpN654", "Remember This Day"),
+  skeletonWeek(14, "March 30–April 5, 2026","He Will Swallow Up Death in Victory","Easter Week",        "the Atonement and Resurrection of Jesus Christ as the fulfillment of all prophecy", null, "Remember This Day — Exodus 7–13"),
+  skeletonWeek(15, "April 6–12, 2026",     "Remember This Day",                 "Exodus 7–13",          "the ten plagues, Passover, and Israel's deliverance from Egypt", null, "Stand Still and See the Salvation of the Lord"),
+  skeletonWeek(16, "April 13–19, 2026",    "Stand Still and See the Salvation", "Exodus 14–18",         "the parting of the Red Sea, manna in the wilderness, and water from the rock", null, "Holiness to the Lord"),
+  skeletonWeek(17, "April 20–26, 2026",    "I Will Be with Thee",               "Exodus 19–24; 31–34",  "the Ten Commandments, the golden calf, and Moses seeing God face to face", null, "Holiness to the Lord — Tabernacle"),
+  skeletonWeek(18, "Apr 27–May 3, 2026",   "Holiness to the Lord",              "Exodus 25–30; 35–40; Leviticus", "the tabernacle and its deep symbolism pointing to Christ", null, "Rebel Not Against the Lord"),
+  skeletonWeek(19, "May 4–10, 2026",       "Rebel Not Against the Lord",        "Numbers",              "Israel's wilderness journey, the bronze serpent, and lessons in trust", null, "Beware Lest Thou Forget"),
+  skeletonWeek(20, "May 11–17, 2026",      "Beware Lest Thou Forget the Lord",  "Deuteronomy",          "Moses' farewell, the Shema, and the covenant renewed on the plains of Moab", null, "Be Strong and of a Good Courage"),
+  skeletonWeek(21, "May 18–24, 2026",      "Be Strong and of a Good Courage",   "Joshua",               "Israel crossing the Jordan, the fall of Jericho, and inheriting the promised land", null, "The Lord Raised Up a Deliverer"),
+  skeletonWeek(22, "May 25–31, 2026",      "The Lord Raised Up a Deliverer",    "Judges",               "the cycle of apostasy and deliverance, Gideon, Samson, and God's patient mercy", null, "Intreat Me Not to Leave Thee"),
+  skeletonWeek(23, "June 1–7, 2026",       "Intreat Me Not to Leave Thee",      "Ruth; 1 Samuel 1–3",   "Ruth's loyalty to Naomi, Boaz as a type of Christ, and Samuel's call in the night", null, "If the Lord Be God, Follow Him"),
+  week24,
+  week25,
+  skeletonWeek(26, "June 22–28, 2026",     "I Have Found the Book of the Law",  "2 Kings 17–25; 2 Chronicles 29–36", "the fall of Israel, Hezekiah's reforms, and Josiah finding the lost scriptures", null, "I Will Praise Thee — Psalms"),
+  skeletonWeek(27, "Jun 29–Jul 5, 2026",   "I Will Praise Thee",                "Psalms",               "Israel's hymnbook — lament, praise, trust, and the messianic Psalms", null, "The Fear of the Lord Is the Beginning of Wisdom"),
+  skeletonWeek(28, "July 6–12, 2026",      "The Fear of the Lord Is the Beginning","Proverbs; Ecclesiastes", "wisdom literature — how to live well and find meaning in God", null, "My Beloved Is Mine"),
+  skeletonWeek(29, "July 13–19, 2026",     "My Beloved Is Mine",                "Song of Solomon; Job 1–2", "covenant love, suffering, and Job's integrity before God", null, "I Know That My Redeemer Liveth"),
+  skeletonWeek(30, "July 20–26, 2026",     "I Know That My Redeemer Liveth",    "Job 3–42",             "Job's suffering, his friends' bad theology, and God speaking from the whirlwind", null, "Wo unto Them That Call Evil Good"),
+  skeletonWeek(31, "Jul 27–Aug 2, 2026",   "Wo unto Them That Call Evil Good",  "Isaiah 1–12",          "Isaiah's vision of Zion, his call, the Immanuel prophecy, and the Branch", null, "Unto Us a Child Is Born"),
+  skeletonWeek(32, "August 3–9, 2026",     "Unto Us a Child Is Born",           "Isaiah 13–35",         "Isaiah's oracles against the nations, the suffering servant, and coming redemption", null, "Hearken unto Me"),
+  skeletonWeek(33, "August 10–16, 2026",   "Hearken unto Me",                   "Isaiah 36–66",         "the comfort of Deutero-Isaiah, 'How beautiful upon the mountains,' and the new covenant", null, "The Lord's Hand Is Stretched Out Still"),
+  skeletonWeek(34, "August 17–23, 2026",   "The Lord's Hand Is Stretched Out Still","Jeremiah 1–23",    "Jeremiah's call, his laments, and God's word like fire in his bones", null, "I Will Make a New Covenant"),
+  skeletonWeek(35, "Aug 24–30, 2026",      "I Will Make a New Covenant",        "Jeremiah 24–52; Lamentations", "the new covenant written on hearts, the fall of Jerusalem, and Lamentations' grief", null, "I Will Give Them One Heart"),
+  skeletonWeek(36, "Aug 31–Sep 6, 2026",   "I Will Give Them One Heart",        "Ezekiel 1–24",         "Ezekiel's chariot vision, the watchman on the wall, and Israel's spiritual adultery", null, "A New Heart Will I Give You"),
+  skeletonWeek(37, "September 7–13, 2026", "A New Heart Will I Give You",       "Ezekiel 25–48",        "the valley of dry bones, the good shepherd, and the millennial temple vision", null, "Come, I Will Show Thee Things Which Must Be Hereafter"),
+  skeletonWeek(38, "September 14–20, 2026","Come, I Will Show Thee",            "Daniel 1–6",           "Daniel in Babylon, the fiery furnace, the handwriting on the wall, and the lion's den", null, "Seal the Book Even to the Time of the End"),
+  skeletonWeek(39, "Sep 21–27, 2026",      "Seal the Book unto the End",        "Daniel 7–12",          "Daniel's apocalyptic visions of world empires and the Ancient of Days", null, "The Lord Is There — Hosea"),
+  skeletonWeek(40, "Sep 28–Oct 4, 2026",   "The Lord Is There",                 "Hosea; Joel; Amos; Obadiah; Jonah", "God's love that pursues like a husband, the day of the Lord, and Jonah's flight", null, "Seek Good and Not Evil"),
+  skeletonWeek(41, "October 5–11, 2026",   "Seek Good and Not Evil",            "Micah; Nahum; Habakkuk; Zephaniah", "justice, mercy, and walking humbly with God", null, "Consider Your Ways — Haggai; Zechariah"),
+  skeletonWeek(42, "October 12–18, 2026",  "Consider Your Ways",                "Haggai; Zechariah",    "rebuilding the temple and Zechariah's messianic visions", null, "Behold, I Will Send My Messenger — Malachi"),
+  skeletonWeek(43, "October 19–25, 2026",  "Behold, I Will Send My Messenger",  "Malachi",              "the final Old Testament prophet — tithing, Elijah's return, and a refiner's fire", null, "Return unto Me — Ezra; Nehemiah"),
+  skeletonWeek(44, "Oct 26–Nov 1, 2026",   "Return unto Me",                    "Ezra; Nehemiah",       "the return from exile, rebuilding Jerusalem's walls, and covenant renewal", null, "The Lord Turned the Captivity — Esther"),
+  skeletonWeek(45, "November 2–8, 2026",   "Who Knoweth Whether Thou Art Come", "Esther",               "Esther's courage, Mordecai's wisdom, and God's providence behind the scenes", null, "Where Wast Thou? — Job Review"),
+  skeletonWeek(46, "November 9–15, 2026",  "Christmas Preparation — Isaiah",    "Isaiah 7–9; 11; 53",   "the great Messianic prophecies of Isaiah pointing to the birth and mission of Christ", null, "He Shall Come"),
+  skeletonWeek(47, "November 16–22, 2026", "He Shall Come",                     "Micah 5; Zechariah 9–14","the prophecies of a ruler born in Bethlehem and the triumphal entry", null, "Season of Gratitude"),
+  skeletonWeek(48, "Nov 23–29, 2026",      "Season of Gratitude",               "Psalms 95–100; 107; 136", "Psalms of thanksgiving — counting God's mercies as the year draws to a close", null, "I Will Not Forget Thee"),
+  skeletonWeek(49, "November 30–Dec 6, 2026","I Will Not Forget Thee",          "Isaiah 40–42; 49",     "the comfort of God, the suffering servant, and Israel as God's witnesses", null, "The Savior Is Born"),
+  skeletonWeek(50, "December 7–13, 2026",  "The Savior Is Born",                "Luke 2; Matthew 1–2",  "the Nativity — shepherds, wise men, and the fulfillment of Old Testament prophecy", null, "The Word Was Made Flesh"),
+  skeletonWeek(51, "December 14–20, 2026", "The Word Was Made Flesh",           "John 1; Isaiah 9",     "the prologue of John and the great light prophesied by Isaiah", null, "Year-End Reflection"),
+  skeletonWeek(52, "December 21–27, 2026", "Year-End Reflection",               "Selected Old Testament Highlights", "a year of walking with the prophets and seeing Jesus Christ in every page", null, "New Year — Come Follow Me 2027"),
 ];
+
+// ── Get current week by date ──────────────────────────────────────────────────
+export function getCurrentWeekIndex() {
+  const today = new Date();
+  const todayMs = today.getTime();
+  for (let i = 0; i < WEEKS.length; i++) {
+    const w = WEEKS[i];
+    const range = w.dateRange;
+    // Parse start date
+    try {
+      const parts = range.split("–");
+      const startStr = parts[0].trim();
+      const endStr = parts[1].trim();
+      // Add year if missing
+      const startFull = startStr.includes(",") ? startStr : `${startStr}, ${w.year}`;
+      const endFull = endStr.includes(",") ? endStr : endStr.match(/[a-zA-Z]/) ? `${endStr} ${w.year}` : `${startStr.split(" ")[0]} ${endStr}, ${w.year}`;
+      const start = new Date(startFull);
+      const end = new Date(endFull);
+      end.setHours(23, 59, 59);
+      if (todayMs >= start.getTime() && todayMs <= end.getTime()) return i;
+    } catch(e) { continue; }
+  }
+  // Default to week 24 (current week) if parsing fails
+  return 23;
+}
 
 export function getCurrentWeek() {
-  const today = new Date();
-  for (const week of WEEKS) {
-    const [monthDay, rest] = week.dateRange.split("–");
-    const startDate = new Date(`${monthDay.trim()} ${week.year}`);
-    const endMonthDay = rest.trim().includes(",")
-      ? rest.trim()
-      : `${monthDay.trim().split(" ")[0]} ${rest.trim()} ${week.year}`;
-    const endDate = new Date(endMonthDay);
-    endDate.setHours(23, 59, 59);
-    if (today >= startDate && today <= endDate) return week;
-  }
-  return WEEKS[0];
+  return WEEKS[getCurrentWeekIndex()];
 }

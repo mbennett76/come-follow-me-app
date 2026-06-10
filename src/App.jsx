@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { WEEKS, getCurrentWeek } from "./data/weekData.js";
+import { WEEKS, getCurrentWeekIndex } from "./data/weekData.js";
 import WeekScreen from "./screens/WeekScreen.jsx";
 import ScripturesScreen from "./screens/ScripturesScreen.jsx";
 import ConferenceScreen from "./screens/ConferenceScreen.jsx";
@@ -27,15 +27,17 @@ const NAV = [
 
 export default function App() {
   const [activeNav, setActiveNav] = useState("week");
-  const [studyMode, setStudyMode]     = useLocalStorage("cfm_mode", "personal");
+  const [studyMode, setStudyMode]         = useLocalStorage("cfm_mode", "personal");
   const [completedItems, setCompletedItems] = useLocalStorage("cfm_completed_v2", {});
+  const [weekIndex, setWeekIndex]         = useLocalStorage("cfm_week_index", getCurrentWeekIndex());
 
-  const week = getCurrentWeek();
+  const week = WEEKS[weekIndex] || WEEKS[getCurrentWeekIndex()];
+  const totalWeeks = WEEKS.length;
 
-  const handleStudyMode = (m) => {
-    setStudyMode(m);
-    // If changing from Settings, jump back to week view
-  };
+  const goToPrevWeek = () => setWeekIndex(i => Math.max(0, i - 1));
+  const goToNextWeek = () => setWeekIndex(i => Math.min(totalWeeks - 1, i + 1));
+  const goToCurrentWeek = () => setWeekIndex(getCurrentWeekIndex());
+  const isCurrentWeek = weekIndex === getCurrentWeekIndex();
 
   return (
     <div style={{ minHeight: "100vh", background: "#F5F2EE", fontFamily: "'Source Sans 3', sans-serif" }}>
@@ -44,22 +46,23 @@ export default function App() {
       {/* ── Sticky Header ── */}
       <header style={{
         background: "linear-gradient(160deg, #1B3A2D 0%, #2D5A3D 60%, #3D7A50 100%)",
-        padding: "18px 20px 16px",
+        padding: "16px 16px 0",
         position: "sticky", top: 0, zIndex: 100,
         boxShadow: "0 2px 20px rgba(0,0,0,0.2)",
       }}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-          {/* Title block */}
-          <div>
+        {/* Top row: title + mode toggle */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
-              fontSize: 11, fontWeight: 700, letterSpacing: "0.15em",
-              textTransform: "uppercase", color: "#8CC9A0", marginBottom: 3,
+              fontSize: 10, fontWeight: 700, letterSpacing: "0.15em",
+              textTransform: "uppercase", color: "#8CC9A0", marginBottom: 2,
             }}>Come Follow Me · 2026 Old Testament</div>
             <div style={{
-              fontFamily: "'EB Garamond', serif", fontSize: 22,
+              fontFamily: "'EB Garamond', serif", fontSize: 20,
               fontWeight: 600, color: "#F0F7F3", lineHeight: 1.2,
+              whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
             }}>{week.title}</div>
-            <div style={{ fontSize: 13, color: "#7ABF92", marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: "#7ABF92", marginTop: 2 }}>
               {week.scriptureRange} · {week.dateRange}
             </div>
           </div>
@@ -67,21 +70,57 @@ export default function App() {
           {/* Mode toggle */}
           <div style={{
             display: "flex", background: "rgba(255,255,255,0.12)",
-            borderRadius: 22, padding: 3, gap: 2, flexShrink: 0, marginLeft: 10,
+            borderRadius: 20, padding: 3, gap: 2, flexShrink: 0, marginLeft: 10,
           }}>
-            {["personal", "family"].map(m => (
+            {["personal","family"].map(m => (
               <button key={m} onClick={() => setStudyMode(m)} style={{
                 background: studyMode === m ? "#fff" : "transparent",
                 color: studyMode === m ? "#1B3A2D" : "#A8D5B5",
-                border: "none", borderRadius: 18,
-                padding: "5px 11px", fontSize: 12, fontWeight: 700,
+                border: "none", borderRadius: 16,
+                padding: "5px 10px", fontSize: 12, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.15s",
                 fontFamily: "'Source Sans 3', sans-serif",
-              }}>
-                {m === "personal" ? "🙏" : "👨‍👩‍👧"}
-              </button>
+              }}>{m === "personal" ? "🙏" : "👨‍👩‍👧"}</button>
             ))}
           </div>
+        </div>
+
+        {/* Week navigation row */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          paddingBottom: 12,
+        }}>
+          <button onClick={goToPrevWeek} disabled={weekIndex === 0} style={{
+            background: "rgba(255,255,255,0.12)", border: "none",
+            color: weekIndex === 0 ? "rgba(255,255,255,0.25)" : "#fff",
+            borderRadius: 8, padding: "6px 10px", fontSize: 16,
+            cursor: weekIndex === 0 ? "default" : "pointer",
+            fontFamily: "'Source Sans 3', sans-serif",
+          }}>←</button>
+
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <div style={{
+              fontSize: 11, color: "#A8D5B5", fontWeight: 700,
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              fontFamily: "'Source Sans 3', sans-serif",
+            }}>Week {week.weekNumber} of {totalWeeks}</div>
+            {!isCurrentWeek && (
+              <button onClick={goToCurrentWeek} style={{
+                background: "rgba(255,255,255,0.15)", border: "none",
+                color: "#fff", borderRadius: 8, padding: "3px 10px",
+                fontSize: 11, cursor: "pointer", marginTop: 2,
+                fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600,
+              }}>↩ Back to This Week</button>
+            )}
+          </div>
+
+          <button onClick={goToNextWeek} disabled={weekIndex === totalWeeks - 1} style={{
+            background: "rgba(255,255,255,0.12)", border: "none",
+            color: weekIndex === totalWeeks - 1 ? "rgba(255,255,255,0.25)" : "#fff",
+            borderRadius: 8, padding: "6px 10px", fontSize: 16,
+            cursor: weekIndex === totalWeeks - 1 ? "default" : "pointer",
+            fontFamily: "'Source Sans 3', sans-serif",
+          }}>→</button>
         </div>
       </header>
 
@@ -104,9 +143,11 @@ export default function App() {
         {activeNav === "settings" && (
           <SettingsScreen
             studyMode={studyMode}
-            setStudyMode={handleStudyMode}
+            setStudyMode={setStudyMode}
             completedItems={completedItems}
             setCompletedItems={setCompletedItems}
+            currentWeek={week}
+            allWeeks={WEEKS}
           />
         )}
       </main>
@@ -127,20 +168,11 @@ export default function App() {
               background: "none", border: "none", cursor: "pointer",
               color: active ? "#1B3A2D" : "#AAA",
               fontFamily: "'Source Sans 3', sans-serif",
-              padding: "4px 16px", borderRadius: 10,
-              transition: "color 0.15s",
+              padding: "4px 16px", borderRadius: 10, transition: "color 0.15s",
             }}>
               <span style={{ fontSize: 22 }}>{n.icon}</span>
-              <span style={{
-                fontSize: 10, fontWeight: active ? 700 : 400,
-                letterSpacing: "0.03em",
-              }}>{n.label}</span>
-              {active && (
-                <span style={{
-                  width: 4, height: 4, borderRadius: "50%",
-                  background: "#1B3A2D", marginTop: 1,
-                }} />
-              )}
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, letterSpacing: "0.03em" }}>{n.label}</span>
+              {active && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#1B3A2D", marginTop: 1 }} />}
             </button>
           );
         })}

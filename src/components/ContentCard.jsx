@@ -201,6 +201,20 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             }}>💡 If you get a 502 error, tap "Search Google" or use the Gospel Library app.</p>
           </>)}
 
+          {/* Coming Soon placeholder */}
+          {item.type === "coming" && (
+            <div style={{
+              background: "linear-gradient(135deg, #FFF8E1, #FFF3CC)",
+              border: "1.5px dashed #FFC107",
+              borderRadius: 10, padding: "14px 16px",
+            }}>
+              <p style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+                color: "#7B5E00", lineHeight: 1.7, margin: 0,
+              }}>{item.text}</p>
+            </div>
+          )}
+
           {/* General Conference */}
           {item.type === "conference" && (<>
             <p style={{
