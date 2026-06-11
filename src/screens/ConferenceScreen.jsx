@@ -13,12 +13,11 @@ export default function ConferenceScreen({ week }) {
       t.conference.toLowerCase().includes(q);
   });
 
-  // Talks tied to current week
-  const weekTags = ["elijah", "1 kings", "elisha", "2 kings", "still small voice",
-    "holy ghost", "faith", "discipleship", "adversity"];
-  const weekTalks = ALL_CONFERENCE_TALKS.filter(t =>
-    t.tags.some(tag => weekTags.includes(tag))
-  );
+  // Use featuredTalkIds from week data if available
+  const featuredIds = week.featuredTalkIds || [];
+  const weekTalks = featuredIds.length > 0
+    ? featuredIds.map(id => ALL_CONFERENCE_TALKS.find(t => t.id === id)).filter(Boolean)
+    : [];
 
   return (
     <div style={{ padding: "20px 16px" }}>
@@ -29,7 +28,7 @@ export default function ConferenceScreen({ week }) {
       <p style={{
         fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
         color: "#888", marginBottom: 16,
-      }}>Talks curated for this week's study</p>
+      }}>Talks curated for {week.scriptureRange}</p>
 
       {/* Search */}
       <div style={{
@@ -56,14 +55,14 @@ export default function ConferenceScreen({ week }) {
         )}
       </div>
 
-      {/* This week's talks */}
-      {!search && (
+      {/* Featured talks for this week */}
+      {!search && weekTalks.length > 0 && (
         <>
           <div style={{
             fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
             fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
             color: "#1A237E", marginBottom: 12,
-          }}>🏛️ Featured This Week</div>
+          }}>🏛️ Featured for {week.scriptureRange}</div>
           {weekTalks.map(talk => (
             <TalkCard key={talk.id} talk={talk} featured />
           ))}
@@ -75,7 +74,23 @@ export default function ConferenceScreen({ week }) {
         </>
       )}
 
-      {/* Talk list */}
+      {/* Skeleton week — no featured talks yet */}
+      {!search && weekTalks.length === 0 && (
+        <div style={{
+          background: "#FFF8E1", border: "1.5px dashed #FFC107",
+          borderRadius: 12, padding: "12px 16px", marginBottom: 20,
+        }}>
+          <p style={{
+            fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+            color: "#7B5E00", margin: 0, lineHeight: 1.65,
+          }}>
+            Featured talks for {week.scriptureRange} haven't been curated yet.
+            Browse all talks below, or generate this week's content using ⚙️ Settings → Generate Week Content.
+          </p>
+        </div>
+      )}
+
+      {/* All talks list */}
       {(search ? filtered : ALL_CONFERENCE_TALKS).map(talk => (
         <TalkCard key={talk.id} talk={talk} />
       ))}
@@ -127,13 +142,15 @@ function TalkCard({ talk, featured }) {
             padding: "6px 13px", borderRadius: 20, textDecoration: "none",
             fontFamily: "'Source Sans 3', sans-serif",
           }}>🏛️ Read Talk →</a>
-          <a href={talk.fallbackUrl} target="_blank" rel="noreferrer" style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            fontSize: 13, fontWeight: 600, color: "#777",
-            background: "#F5F5F5", border: "1.5px solid #DDD",
-            padding: "6px 13px", borderRadius: 20, textDecoration: "none",
-            fontFamily: "'Source Sans 3', sans-serif",
-          }}>🔍 Search Google</a>
+          {talk.fallbackUrl && (
+            <a href={talk.fallbackUrl} target="_blank" rel="noreferrer" style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 13, fontWeight: 600, color: "#777",
+              background: "#F5F5F5", border: "1.5px solid #DDD",
+              padding: "6px 13px", borderRadius: 20, textDecoration: "none",
+              fontFamily: "'Source Sans 3', sans-serif",
+            }}>🔍 Search Google</a>
+          )}
         </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
           {talk.tags.map(tag => (
