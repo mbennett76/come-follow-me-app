@@ -180,20 +180,70 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               fontSize: 13, color: "#27AE60", fontWeight: 700,
               margin: "0 0 12px", fontFamily: "'Source Sans 3', sans-serif",
             }}>⏱ {item.note}</p>}
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {[
-                { label: "Follow Him Website", url: item.podcastUrl, emoji: "🌐" },
-                { label: "Apple Podcasts",     url: item.appleUrl,   emoji: "🎵" },
-                { label: "Spotify",            url: item.spotifyUrl, emoji: "🎧" },
-              ].map(link => (
-                <a key={link.label} href={link.url} target="_blank" rel="noreferrer" style={{
+
+            {/* Episode links — Part 1, Part 2, Favorites if available */}
+            {(item.podcastUrl || item.podcast2Url || item.podcastFavUrl) && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{
+                  fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+                  fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+                  color: "#27AE60", marginBottom: 6,
+                }}>Episode Links</div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {item.podcastUrl && (
+                    <a href={item.podcastUrl} target="_blank" rel="noreferrer" style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      fontSize: 13, fontWeight: 700, color: "#0D3D2B",
+                      background: "#fff", border: "1.5px solid #27AE60",
+                      padding: "7px 13px", borderRadius: 20,
+                      textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                    }}>🎙️ Part 1</a>
+                  )}
+                  {item.podcast2Url && (
+                    <a href={item.podcast2Url} target="_blank" rel="noreferrer" style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      fontSize: 13, fontWeight: 700, color: "#0D3D2B",
+                      background: "#fff", border: "1.5px solid #27AE60",
+                      padding: "7px 13px", borderRadius: 20,
+                      textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                    }}>🎙️ Part 2</a>
+                  )}
+                  {item.podcastFavUrl && (
+                    <a href={item.podcastFavUrl} target="_blank" rel="noreferrer" style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      fontSize: 13, fontWeight: 700, color: "#0D3D2B",
+                      background: "#fff", border: "1.5px solid #27AE60",
+                      padding: "7px 13px", borderRadius: 20,
+                      textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                    }}>⭐ Favorites (5 min)</a>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Listen on */}
+            <div style={{ marginBottom: 4 }}>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+                fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+                color: "#27AE60", marginBottom: 6,
+              }}>Listen On</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <a href={item.appleUrl} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
                   fontSize: 13, fontWeight: 700, color: "#0D3D2B",
                   background: "#fff", border: "1.5px solid #27AE60",
                   padding: "7px 13px", borderRadius: 20,
                   textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
-                }}>{link.emoji} {link.label}</a>
-              ))}
+                }}>🎵 Apple Podcasts</a>
+                <a href={item.spotifyUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 5,
+                  fontSize: 13, fontWeight: 700, color: "#0D3D2B",
+                  background: "#fff", border: "1.5px solid #27AE60",
+                  padding: "7px 13px", borderRadius: 20,
+                  textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                }}>🎧 Spotify</a>
+              </div>
             </div>
           </>)}
 
