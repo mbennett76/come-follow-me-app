@@ -8,7 +8,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
   // Filter by study mode
   if (item.type === "question" && item.mode && item.mode !== "both") {
     if (item.mode === "personal" && studyMode === "family") return null;
-    if (item.mode === "family" && studyMode === "personal") return null;
+    if (item.mode === "family"   && studyMode === "personal") return null;
   }
 
   return (
@@ -44,41 +44,72 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
       {expanded && (
         <div style={{ padding: "0 16px 16px" }}>
 
-          {/* Scripture */}
+          {/* ── Scripture ── */}
           {item.type === "scripture" && (<>
+
+            {/* Daily reading assignment badge — shown when dailyRef is present */}
+            {item.dailyRef && (
+              <div style={{
+                background: "#1B3A2D", borderRadius: 10,
+                padding: "10px 14px", marginBottom: 14,
+              }}>
+                <div style={{
+                  fontFamily: "'Source Sans 3', sans-serif",
+                  fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+                  textTransform: "uppercase", color: "#A8D5B5", marginBottom: 3,
+                }}>📖 Today's Reading Assignment</div>
+                <div style={{
+                  fontFamily: "'EB Garamond', serif",
+                  fontSize: 20, fontWeight: 600, color: "#F0F7F3",
+                }}>{item.dailyRef}</div>
+                {item.dailySummary && (
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif",
+                    fontSize: 13, color: "#7ABF92", marginTop: 3,
+                  }}>{item.dailySummary}</div>
+                )}
+              </div>
+            )}
+
+            {/* Key verse */}
             <p style={{
               fontFamily: "'EB Garamond', serif", fontSize: 18,
-              lineHeight: 1.75, color: "#2A3828", fontStyle: "italic", margin: "0 0 12px",
-            }}>"{item.text}"</p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-              {/* Primary: Gospel Library deep link — opens app on phone */}
+              lineHeight: 1.75, color: "#2A3828", fontStyle: "italic",
+              margin: "0 0 14px",
+            }}>"{item.text}"
+              <span style={{
+                display: "block", fontFamily: "'Source Sans 3', sans-serif",
+                fontSize: 12, fontStyle: "normal", color: "#7AB648",
+                fontWeight: 700, marginTop: 4,
+              }}>— {item.reference}</span>
+            </p>
+
+            {/* Open buttons */}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
               <a href={item.url} style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 14, fontWeight: 700, color: cfg.color,
                 background: "#fff", border: `1.5px solid ${cfg.border}`,
-                padding: "7px 14px", borderRadius: 20, textDecoration: "none",
+                padding: "8px 14px", borderRadius: 20, textDecoration: "none",
                 fontFamily: "'Source Sans 3', sans-serif",
               }}>📱 Open in Gospel Library</a>
-              {/* Fallback: web browser */}
               {item.webUrl && (
                 <a href={item.webUrl} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 6,
                   fontSize: 13, fontWeight: 600, color: "#777",
                   background: "#F5F5F5", border: "1.5px solid #DDD",
-                  padding: "7px 13px", borderRadius: 20, textDecoration: "none",
+                  padding: "8px 13px", borderRadius: 20, textDecoration: "none",
                   fontFamily: "'Source Sans 3', sans-serif",
-                }}>🌐 Open in Browser</a>
+                }}>🌐 Browser</a>
               )}
             </div>
             <p style={{
-              fontSize: 11, color: "#BBB", margin: "8px 0 0", lineHeight: 1.5,
+              fontSize: 11, color: "#BBB", margin: 0, lineHeight: 1.5,
               fontFamily: "'Source Sans 3', sans-serif",
-            }}>
-              📱 Tap "Gospel Library" to open in the app · 🌐 "Browser" as backup
-            </p>
+            }}>📱 Opens Gospel Library app · 🌐 Browser as backup</p>
           </>)}
 
-          {/* Insight / intro / review / nextweek */}
+          {/* ── Insight / intro / review / nextweek ── */}
           {["insight","intro","review","nextweek"].includes(item.type) && (
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif", fontSize: 16,
@@ -86,7 +117,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             }}>{item.text}</p>
           )}
 
-          {/* Question */}
+          {/* ── Question ── */}
           {item.type === "question" && (<>
             <p style={{
               fontFamily: "'EB Garamond', serif", fontSize: 18,
@@ -112,7 +143,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             )}
           </>)}
 
-          {/* Video / Line Upon Line — YouTube embed */}
+          {/* ── Video / Line Upon Line ── */}
           {(item.type === "video" || item.type === "lineUponLine") && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif", fontSize: 15,
@@ -125,8 +156,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               <iframe
                 style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
                 src={`https://www.youtube-nocookie.com/embed/${item.embedId}?rel=0&modestbranding=1`}
-                title={item.title}
-                frameBorder="0"
+                title={item.title} frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
@@ -140,7 +170,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               }}>▶ Open in YouTube if video doesn't load</a>
           </>)}
 
-          {/* Podcast */}
+          {/* ── Podcast ── */}
           {item.type === "podcast" && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif", fontSize: 15,
@@ -153,8 +183,8 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[
                 { label: "Follow Him Website", url: item.podcastUrl, emoji: "🌐" },
-                { label: "Apple Podcasts", url: item.appleUrl, emoji: "🎵" },
-                { label: "Spotify", url: item.spotifyUrl, emoji: "🎧" },
+                { label: "Apple Podcasts",     url: item.appleUrl,   emoji: "🎵" },
+                { label: "Spotify",            url: item.spotifyUrl, emoji: "🎧" },
               ].map(link => (
                 <a key={link.label} href={link.url} target="_blank" rel="noreferrer" style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
@@ -167,7 +197,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             </div>
           </>)}
 
-          {/* Article / CFM Manual */}
+          {/* ── Article / CFM Manual ── */}
           {item.type === "article" && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif",
@@ -201,21 +231,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             }}>💡 If you get a 502 error, tap "Search Google" or use the Gospel Library app.</p>
           </>)}
 
-          {/* Coming Soon placeholder */}
-          {item.type === "coming" && (
-            <div style={{
-              background: "linear-gradient(135deg, #FFF8E1, #FFF3CC)",
-              border: "1.5px dashed #FFC107",
-              borderRadius: 10, padding: "14px 16px",
-            }}>
-              <p style={{
-                fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-                color: "#7B5E00", lineHeight: 1.7, margin: 0,
-              }}>{item.text}</p>
-            </div>
-          )}
-
-          {/* General Conference */}
+          {/* ── General Conference ── */}
           {item.type === "conference" && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif",
@@ -248,6 +264,20 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               fontFamily: "'Source Sans 3', sans-serif",
             }}>💡 If you get a 502 error, tap "Search Google" or use the Gospel Library app.</p>
           </>)}
+
+          {/* ── Coming Soon placeholder ── */}
+          {item.type === "coming" && (
+            <div style={{
+              background: "linear-gradient(135deg, #FFF8E1, #FFF3CC)",
+              border: "1.5px dashed #FFC107",
+              borderRadius: 10, padding: "14px 16px",
+            }}>
+              <p style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+                color: "#7B5E00", lineHeight: 1.7, margin: 0,
+              }}>{item.text}</p>
+            </div>
+          )}
 
         </div>
       )}
