@@ -93,7 +93,8 @@ function UpdateModal({ onClose, currentWeek, allWeeks }) {
 
   // Always use the ACTUAL current calendar week as the base, not the week being viewed
   const calendarWeekIdx = getCurrentWeekIndex();
-  const nextSkeletonWeek = allWeeks.slice(calendarWeekIdx + 1).find(w => w.skeleton) || allWeeks[(calendarWeekIdx + 1) % allWeeks.length];
+  // Target simply the next week in sequence — not just skeletons
+  const nextSkeletonWeek = allWeeks[calendarWeekIdx + 1] || allWeeks[calendarWeekIdx];
   // Use the actual current calendar week as the template (for structure matching)
   const templateWeek = allWeeks[calendarWeekIdx] || currentWeek;
 
@@ -309,7 +310,7 @@ export default function SettingsScreen({ studyMode, setStudyMode, completedItems
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const totalCompleted = Object.values(completedItems).filter(Boolean).length;
   const calendarIdx = getCurrentWeekIndex();
-  const nextSkeleton = allWeeks?.slice(calendarIdx + 1).find(w => w.skeleton);
+  const nextSkeleton = allWeeks?.[calendarIdx + 1];
 
   const clearProgress = () => {
     if (window.confirm("Clear all progress? This cannot be undone.")) {
