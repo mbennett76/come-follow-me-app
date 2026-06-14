@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getCurrentWeekIndex } from "../data/weekData.js";
 
 function buildUpdatePrompt(currentWeek, nextWeek) {
   const templateDay = currentWeek.days[1]; // Monday as template
@@ -15,46 +16,88 @@ Generate a complete WEEKS array entry for:
 
 REQUIREMENTS:
 1. 7 days (Sunday–Saturday), each with 10–15 min of content
-2. Each day includes: scripture reading, study insight, discussion question (personal + family mode), and at least one of: podcast slot (Follow Him), scripture story video (search YouTube for a verified Latter Day Kids, Living Scriptures, or Line Upon Line CFM video for this exact week), or General Conference talk
-3. Sunday = week overview + BibleProject or overview video
-4. Wednesday = Follow Him podcast card
-5. Saturday = week reflection + nextweek preview
-6. Scripture links format: url: "gospellibrary://content/scriptures/ot/[book]/[chapter]", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/[book]/[chapter]?lang=eng"
-7. Conference talks: include url AND fallbackUrl (Google search URL for the talk)
-8. YouTube video embedIds: ONLY use verified IDs. Search YouTube for "Line Upon Line Come Follow Me ${nextWeek.scriptureRange}" or "Latter Day Kids Come Follow Me ${nextWeek.scriptureRange}" and use the exact video ID from the URL.
+2. Days follow SCRIPTURE CHAPTER ORDER — Monday through Friday readings must go in sequential chapter order through the week's scripture range
+3. Each day includes: scripture reading with dailyRef + dailySummary, study insight, discussion question (personal + family mode), and at least one of: Follow Him podcast, scripture story video, or General Conference talk
+4. Sunday = week overview + BibleProject or overview video. Include embedId for a VERIFIED YouTube video — search YouTube for "BibleProject [book name] overview" and use the exact video ID
+5. Tuesday = Follow Him podcast card (search followhim.co for the episode matching this week, include Part 1, Part 2, and Favorites URLs)
+6. Saturday = week reflection + nextweek preview
+7. Scripture card format:
+   { type: "scripture", icon: "📜", label: "Scripture Reading",
+     reference: "Book Chapter:Verses",
+     dailyRef: "Book Chapter:Verses",
+     dailySummary: "One line describing what happens in this passage",
+     text: "A key verse from this passage in KJV",
+     url: "gospellibrary://content/scriptures/ot/[book-slug]/[chapter]",
+     webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/[book-slug]/[chapter]?lang=eng" }
+8. Conference talks: choose talks that directly relate to this week's themes. Include url AND fallbackUrl
+9. YouTube embedIds: ONLY use verified IDs. Search YouTube for "Line Upon Line Come Follow Me ${nextWeek.scriptureRange}" or "Latter Day Kids Come Follow Me ${nextWeek.scriptureRange}" and verify the video exists before using the ID
 
-CONTENT TYPE OPTIONS:
-- intro, scripture, insight, question (with mode: "personal" | "family" | "both"), video, lineUponLine, podcast, article, conference, review, nextweek
-
-EXAMPLE CONTENT ITEM STRUCTURE:
-${templateContent}
-
-PODCAST STRUCTURE:
-{ type: "podcast", icon: "🎙️", label: "Follow Him Podcast", title: "...", description: "...",
-  podcastUrl: "https://followhimpodcast.com",
-  spotifyUrl: "https://open.spotify.com/show/2dnak4SBEaUyWM9BBqZi9X",
-  appleUrl: "https://podcasts.apple.com/us/podcast/follow-him-a-come-follow-me-podcast/id1457038461",
-  note: "Suggested: first 20 minutes" }
+PODCAST STRUCTURE (use these exact URLs):
+{ type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
+  title: "Episode ${nextWeek.weekNumber}: ${nextWeek.scriptureRange} with [Guest Name]",
+  description: "...",
+  podcastUrl: "https://followhim.co/show-note/old-testament-episode-${nextWeek.weekNumber}-2026-[slug]-part-1/",
+  podcast2Url: "https://followhim.co/show-note/old-testament-episode-${nextWeek.weekNumber}-2026-[slug]-part-2/",
+  podcastFavUrl: "https://followhim.co/show-note/old-testament-episode-${nextWeek.weekNumber}-2026-[slug]-favorites/",
+  spotifyUrl: "https://open.spotify.com/show/15G9TTz8yLp0dQyEcBQ8BY",
+  appleUrl: "https://podcasts.apple.com/us/podcast/followhim/id1545433056",
+  note: "Part 1 & 2 with [Guest] · Favorites is a short 5-min version" }
 
 CONFERENCE TALK STRUCTURE:
-{ type: "conference", icon: "🏛️", label: "General Conference", title: "...", speaker: "...",
+{ type: "conference", icon: "🏛️", label: "General Conference",
+  title: "...", speaker: "...",
   conference: "April/October YEAR General Conference",
   description: "...",
   url: "https://www.churchofjesuschrist.org/study/general-conference/YEAR/MM/slug",
   fallbackUrl: "https://www.google.com/search?q=..." }
 
-OUTPUT: Return ONLY the JavaScript object (no import/export, no surrounding code, no markdown fences). Start with { weekNumber: ${nextWeek.weekNumber}, and end with the closing }. It must be valid JS that can be pasted directly into the WEEKS array.`;
+ALSO REQUIRED — include these three fields at the end of the object (after the days array):
+
+scriptureChapters: [
+  { ref: "Book Chapter", desc: "One line describing the chapter content",
+    appUrl: "gospellibrary://content/scriptures/ot/[slug]/[chapter]",
+    webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/[slug]/[chapter]?lang=eng" },
+  // one entry per chapter in the week's reading
+],
+keyVerses: [
+  { ref: "Book Chapter:Verse", text: "The verse text in KJV",
+    appUrl: "gospellibrary://content/scriptures/ot/[slug]/[chapter].[verse]#p[verse]",
+    webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/[slug]/[chapter]?lang=eng&id=p[verse]#p[verse]" },
+  // 4-5 key verses from across the week's reading
+],
+featuredTalkIds: ["talk-id-1", "talk-id-2", "talk-id-3"],
+// Use the id field from the ALL_CONFERENCE_TALKS array in weekData.js
+// Available IDs: nelson-hear-him-2020, monson-come-follow-me-2013, holland-lord-i-believe-2013,
+// eyring-mountains-2012, bednar-spirit-revelation-2011, nelson-momentum-2022,
+// holland-broken-things-2006, uchtdorf-forget-me-not-2011, nelson-let-god-prevail-2020,
+// bednar-heart-mighty-change-2012, oaks-good-better-best-2007, eyring-remembrance-gratitude-1989
+
+EXAMPLE CONTENT ITEM STRUCTURE:
+${templateContent}
+
+OUTPUT INSTRUCTIONS:
+1. Return ONLY the JavaScript object — no import/export, no surrounding code, no markdown fences
+2. Start with { weekNumber: ${nextWeek.weekNumber}, and end with the closing }
+3. The object must be valid JavaScript that can be pasted directly into the WEEKS array
+
+FIND AND REPLACE INSTRUCTION:
+At the very end of your response, after the closing }, add this exact line on a new line:
+---
+FIND THIS LINE in src/data/weekData.js and replace it entirely with the object above:
+sk(${nextWeek.weekNumber}, "${nextWeek.dateRange}", "${nextWeek.title}",`;
 }
 
 function UpdateModal({ onClose, currentWeek, allWeeks }) {
   const [copied, setCopied] = useState(false);
   const [copiedTemplate, setCopiedTemplate] = useState(false);
 
-  // Find next skeleton week after current
-  const currentIdx = allWeeks.findIndex(w => w.weekNumber === currentWeek.weekNumber);
-  const nextSkeletonWeek = allWeeks.slice(currentIdx + 1).find(w => w.skeleton) || allWeeks[(currentIdx + 1) % allWeeks.length];
+  // Always use the ACTUAL current calendar week as the base, not the week being viewed
+  const calendarWeekIdx = getCurrentWeekIndex();
+  const nextSkeletonWeek = allWeeks.slice(calendarWeekIdx + 1).find(w => w.skeleton) || allWeeks[(calendarWeekIdx + 1) % allWeeks.length];
+  // Use the actual current calendar week as the template (for structure matching)
+  const templateWeek = allWeeks[calendarWeekIdx] || currentWeek;
 
-  const prompt = buildUpdatePrompt(currentWeek, nextSkeletonWeek || currentWeek);
+  const prompt = buildUpdatePrompt(templateWeek, nextSkeletonWeek || currentWeek);
 
   const copyPrompt = async () => {
     try {
@@ -76,7 +119,7 @@ function UpdateModal({ onClose, currentWeek, allWeeks }) {
 
   const copyTemplate = async () => {
     try {
-      const templateJSON = JSON.stringify(currentWeek, null, 2);
+      const templateJSON = JSON.stringify(templateWeek, null, 2);
       await navigator.clipboard.writeText(templateJSON);
       setCopiedTemplate(true);
       setTimeout(() => setCopiedTemplate(false), 3000);
@@ -265,7 +308,8 @@ function Section({ title, icon, children }) {
 export default function SettingsScreen({ studyMode, setStudyMode, completedItems, setCompletedItems, currentWeek, allWeeks }) {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const totalCompleted = Object.values(completedItems).filter(Boolean).length;
-  const nextSkeleton = allWeeks?.slice(allWeeks.findIndex(w => w.weekNumber === currentWeek.weekNumber) + 1).find(w => w.skeleton);
+  const calendarIdx = getCurrentWeekIndex();
+  const nextSkeleton = allWeeks?.slice(calendarIdx + 1).find(w => w.skeleton);
 
   const clearProgress = () => {
     if (window.confirm("Clear all progress? This cannot be undone.")) {
