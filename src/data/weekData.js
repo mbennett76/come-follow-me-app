@@ -16,6 +16,7 @@ export const TYPE_CONFIG = {
   review:       { color: "#37474F", bg: "#ECEFF1", border: "#90A4AE" },
   nextweek:     { color: "#1B5E20", bg: "#E8F5E9", border: "#4CAF50" },
   coming:       { color: "#7B5E00", bg: "#FFF8E1", border: "#FFC107" },
+  manualIntro:  { color: "#4A1942", bg: "#F7EEF6", border: "#9B59B6" },
 };
 
 export const ALL_CONFERENCE_TALKS = [
@@ -82,19 +83,23 @@ export const ALL_CONFERENCE_TALKS = [
 ];
 
 // ── Skeleton week builder ─────────────────────────────────────────────────────
-function sk(weekNumber, dateRange, title, scriptureRange, summary, lulId, nextTitle) {
+function sk(weekNumber, dateRange, title, scriptureRange, summary, lulId, nextTitle, manualText) {
   return {
     weekNumber, year: 2026, dateRange, title, scriptureRange,
     theme: summary, skeleton: true,
     days: [
       { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
         content: [
-          { type: "intro", icon: "📖", label: "This Week's Focus",
-            text: `This week: ${scriptureRange} — ${summary}. Use Sunday to read the overview and set your intention.` },
+          { type: "manualIntro", icon: "📋", label: "This Week in the CFM Manual",
+            source: `Come Follow Me Manual, ${dateRange}`,
+            sourceUrl: `https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/${String(weekNumber).padStart(2,'0')}?lang=eng`,
+            text: manualText },
           ...(lulId ? [{ type: "lineUponLine", icon: "🎥", label: "Line Upon Line Overview",
             title: `${scriptureRange} — Come Follow Me Overview`,
             description: `Line Upon Line's weekly CFM video for ${scriptureRange}.`,
             embedId: lulId }] : []),
+          { type: "intro", icon: "📖", label: "This Week's Focus",
+            text: `This week: ${scriptureRange} — ${summary}. Use Sunday to read the overview and set your intention for the week's study.` },
           { type: "coming", icon: "🔄", label: "Full Content Coming",
             text: `Full daily content for this week can be generated using the Update button in ⚙️ Settings → Generate Week Content.` },
         ] },
@@ -133,8 +138,10 @@ const week24 = {
   days: [
     { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
       content: [
-        { type: "intro", icon: "📖", label: "This Week's Focus",
-          text: "This week we watch Israel reject God as their king and demand a human one. Saul starts strong but his heart drifts. Then God sends Samuel to a shepherd boy in Bethlehem — and teaches us forever that 'the Lord seeth not as man seeth; for man looketh on the outward appearance, but the Lord looketh on the heart.'" },
+        { type: "manualIntro", icon: "📋", label: "This Week in the CFM Manual",
+          source: "Come Follow Me Manual, June 8–14, 2026",
+          sourceUrl: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/24?lang=eng",
+          text: "Saul was a keeper of donkeys. Though tall and handsome, he was 'little in his own sight' and self-conscious about his family heritage. On the day he was to be presented before Israel as their king, he didn't show up; he was so nervous he 'hid himself.' David was a keeper of sheep. He wasn't as physically impressive as his seven older brothers. On the day Samuel came to choose a new king for Israel, it didn't seem worthwhile to include David in the lineup. And yet the Lord chose David — and not Saul — to be Israel's greatest king. The Lord's explanation for this choice gives us one of the most important principles of the scriptures: 'The Lord seeth not as man seeth; for man looketh on the outward appearance, but the Lord looketh on the heart.' As you read about Saul and David, you might ask yourself: What does the Lord see when He looks at my heart?" },
         { type: "scripture", icon: "📜", label: "Opening Verse", reference: "1 Samuel 16:7",
           dailyRef: "1 Samuel 8–10",
           dailySummary: "Israel demands a king; Saul is chosen and anointed",
@@ -145,6 +152,8 @@ const week24 = {
           title: "BibleProject: 1 Samuel Overview",
           description: "An animated overview of 1 Samuel — Israel's transition to monarchy, Saul's rise and fall, and God's search for a man after His own heart.",
           embedId: "bVFW3wbi9pk" },
+        { type: "intro", icon: "📖", label: "This Week's Focus",
+          text: "This week we watch Israel reject God as their king and demand a human one. Saul starts strong but his heart drifts. Then God sends Samuel to a shepherd boy in Bethlehem — and teaches us forever that 'the Lord seeth not as man seeth; for man looketh on the outward appearance, but the Lord looketh on the heart.'" },
         { type: "question", icon: "💭", label: "Reflection to Carry This Week",
           text: "God looks on the heart — not outward appearance. What does your heart look like right now? What is God seeing that others might not?",
           mode: "both" },
@@ -458,28 +467,72 @@ const week25 = {
 
 // ── All 52 Weeks — Verified Schedule ─────────────────────────────────────────
 export const WEEKS = [
-  sk(1,  "Dec 29–Jan 4, 2026",    "Introduction to the Old Testament",   "Introduction to Old Testament",        "an introduction to the Old Testament and its witness of Jesus Christ",                      null,           "Moses 1; Abraham 3"),
-  sk(2,  "January 5–11, 2026",    "This Is My Work and My Glory",        "Moses 1; Abraham 3",                   "God's grand vision of His work and the premortal life",                                     null,           "The Creation"),
-  sk(3,  "January 12–18, 2026",   "The Creation",                        "Genesis 1–2; Moses 2–3; Abraham 4–5",  "the Creation and our identity as God's children",                                           null,           "Adam and Eve"),
-  sk(4,  "January 19–25, 2026",   "Adam and Eve",                        "Genesis 3–4; Moses 4–5",               "the Fall and the plan of redemption",                                                       "6i1gwgNZX1k",  "Enoch and the City of Zion"),
-  sk(5,  "Jan 26–Feb 1, 2026",    "Enoch and the City of Zion",          "Genesis 5; Moses 6",                   "Enoch's walk with God and the building of Zion",                                            "Nry1kYw7dAo",  "The Megavision of Enoch"),
-  sk(6,  "February 2–8, 2026",    "The Megavision of Enoch",             "Moses 7",                              "Enoch's vision of God weeping and the redemption of Zion",                                  "ZKZoXR_pBLo",  "Noah and the Flood"),
-  sk(7,  "February 9–15, 2026",   "Noah and the Flood",                  "Genesis 6–11; Moses 8",                "the covenant with Noah and the tower of Babel",                                             "iJHru0_bUJI",  "The Abrahamic Covenant"),
-  sk(8,  "February 16–22, 2026",  "The Abrahamic Covenant",              "Genesis 12–17; Abraham 1–2",           "Abraham's call and the covenant of endless posterity",                                      "_AzLaRWvqOg",  "Is Any Thing Too Hard for the Lord?"),
-  sk(9,  "Feb 23–Mar 1, 2026",    "Is Any Thing Too Hard for the Lord?", "Genesis 18–23",                        "Sarah's laughter, the destruction of Sodom, and the Abrahamic sacrifice",                   "jzLRfH2VC34",  "Jacob and Esau"),
-  sk(10, "March 2–8, 2026",       "Jacob and Esau",                      "Genesis 24–33",                        "Isaac, Rebekah, Jacob's ladder, and the covenant passing to a new generation",              "S2QEXPrXuhw",  "Joseph in Egypt"),
-  sk(11, "March 9–15, 2026",      "Joseph in Egypt",                     "Genesis 37–41",                        "Joseph's coat, Potiphar's house, and his rise in Egypt",                                    "M-vDrXFdbUI",  "Joseph — A Type of Christ"),
-  sk(12, "March 16–22, 2026",     "Joseph — A Type of Christ",           "Genesis 42–50",                        "Joseph revealing himself to his brothers and the reunion of Israel's family",               "ia61zgwiy30",  "A Prophet Is Born"),
-  sk(13, "March 23–29, 2026",     "A Prophet Is Born",                   "Exodus 1–6",                           "Moses' birth, the burning bush, and the great I AM",                                        "fK2M9zpN654",  "Easter — He Will Swallow Up Death"),
-  sk(14, "Mar 30–Apr 5, 2026",    "He Will Swallow Up Death in Victory", "Easter Week",                          "the Atonement and Resurrection of Jesus Christ, fulfillment of all Old Testament prophecy", null,           "Remember This Day"),
-  sk(15, "April 6–12, 2026",      "Remember This Day",                   "Exodus 7–13",                          "the ten plagues, Passover, and Israel's deliverance from Egypt",                            null,           "Stand Still and See the Salvation"),
-  sk(16, "April 13–19, 2026",     "Stand Still and See the Salvation",   "Exodus 14–18",                         "the parting of the Red Sea, manna in the wilderness, and water from the rock",             null,           "I Will Be with Thee"),
-  sk(17, "April 20–26, 2026",     "I Will Be with Thee",                 "Exodus 19–24; 31–34",                  "the Ten Commandments, the golden calf, and Moses seeing God face to face",                  null,           "Holiness to the Lord"),
-  sk(18, "Apr 27–May 3, 2026",    "Holiness to the Lord",                "Exodus 25–30; 35–40; Leviticus",       "the tabernacle and its deep symbolism pointing to Christ",                                  null,           "Rebel Not Against the Lord"),
-  sk(19, "May 4–10, 2026",        "Rebel Not Against the Lord",          "Numbers",                              "Israel's wilderness journey, the bronze serpent, and lessons in trust",                    null,           "Beware Lest Thou Forget"),
-  sk(20, "May 11–17, 2026",       "Beware Lest Thou Forget the Lord",    "Deuteronomy",                          "Moses' farewell, the Shema, and the covenant renewed before entering the land",             null,           "Be Strong and of a Good Courage"),
-  sk(21, "May 18–24, 2026",       "Be Strong and of a Good Courage",     "Joshua",                               "Israel crossing the Jordan, the fall of Jericho, and inheriting the promised land",        null,           "The Lord Raised Up a Deliverer"),
-  sk(22, "May 25–31, 2026",       "The Lord Raised Up a Deliverer",      "Judges 2–4; 6–8; 13–16",              "the cycle of apostasy and deliverance, Gideon, Samson, and God's patient mercy",            null,           "My Heart Rejoiceth in the Lord"),
+  sk(1,  "Dec 29–Jan 4, 2026",    "Introduction to the Old Testament",   "Introduction to Old Testament",        "an introduction to the Old Testament and its witness of Jesus Christ",                      null,           "Moses 1; Abraham 3",
+    "When you consider studying the Old Testament this year, how do you feel? Eager? Uncertain? Afraid? All of these emotions are understandable. The Old Testament is one of the oldest collections of writings in the world, and this can make it both exciting and intimidating. And yet in these writings we see people having experiences that seem familiar. We recognize gospel themes that witness of the divinity of Jesus Christ and His gospel."),
+
+  sk(2,  "January 5–11, 2026",    "This Is My Work and My Glory",        "Moses 1; Abraham 3",                   "God's grand vision of His work and the premortal life",                                     null,           "The Creation",
+    "The Bible begins with the words \'in the beginning God created the heaven and the earth.\' But what was there before this \'beginning\'? And why did God create all of this? Through the Prophet Joseph Smith, the Lord has shed light on these questions — giving us the record of a vision in which Abraham saw our existence as spirits \'before the world was,\' and an inspired revision of Genesis called the book of Moses."),
+
+  sk(3,  "January 12–18, 2026",   "The Creation",                        "Genesis 1–2; Moses 2–3; Abraham 4–5",  "the Creation and our identity as God's children",                                           null,           "Adam and Eve",
+    "There is a reason the Creation story is the opening of the scriptures. Everything begins here. The world and everything in it — including you and me — is a gift from a God who creates out of love. As you study the Creation accounts this week, look for ways they testify of Jesus Christ and teach about who you are and your relationship with God."),
+
+  sk(4,  "January 19–25, 2026",   "Adam and Eve",                        "Genesis 3–4; Moses 4–5",               "the Fall and the plan of redemption",                                                       "6i1gwgNZX1k",  "Enoch and the City of Zion",
+    "Adam and Eve\'s experience in the Garden of Eden is one of the foundational stories of the scriptures — and one of the most misunderstood. Their choice was not a mistake that ruined God\'s plan. It was a necessary step in it. Without it, there could be no mortality, no agency, no growth, no families, no redemption, and no joy. As you read, look for evidence that God prepared a way even before the Fall."),
+
+  sk(5,  "Jan 26–Feb 1, 2026",    "Enoch and the City of Zion",          "Genesis 5; Moses 6",                   "Enoch's walk with God and the building of Zion",                                            "Nry1kYw7dAo",  "The Megavision of Enoch",
+    "\'And Enoch walked with God.\' Those four words are one of the most remarkable statements in all of scripture. In a world of wickedness, one man walked with God so closely that God eventually took him and his whole city to heaven. As you read Genesis 5 and Moses 6, ask yourself: what does it mean to walk with God? And what would it take for you to do it?"),
+
+  sk(6,  "February 2–8, 2026",    "The Megavision of Enoch",             "Moses 7",                              "Enoch's vision of God weeping and the redemption of Zion",                                  "ZKZoXR_pBLo",  "Noah and the Flood",
+    "The vision of Enoch in Moses 7 is one of the most astonishing passages in scripture. In it, Enoch sees God weeping. The God who created the universe, who has all power — is weeping. And when Enoch asks why, God points to the suffering of His children and says: \'These thy brethren; they are the workmanship of mine own hands.\' As you study this vision, consider what it teaches about who God is and how He feels about you."),
+
+  sk(7,  "February 9–15, 2026",   "Noah and the Flood",                  "Genesis 6–11; Moses 8",                "the covenant with Noah and the tower of Babel",                                             "iJHru0_bUJI",  "The Abrahamic Covenant",
+    "When God looked at Noah\'s generation, He saw that \'the wickedness of man was great in the earth.\' And yet, in the middle of that world, one man \'found grace in the eyes of the Lord.\' As you read about Noah and the flood this week, think about what it means to be one person of faith in a world that has largely lost it."),
+
+  sk(8,  "February 16–22, 2026",  "The Abrahamic Covenant",              "Genesis 12–17; Abraham 1–2",           "Abraham's call and the covenant of endless posterity",                                      "_AzLaRWvqOg",  "Is Any Thing Too Hard for the Lord?",
+    "Of all the people the Lord could have chosen to be the father of His covenant people, why did He choose Abram? We\'re not told much about him before the Lord called him. He was willing to follow when God called. That willingness seems to be the key. As you read this week, look for what it means to be called by God — and to answer."),
+
+  sk(9,  "Feb 23–Mar 1, 2026",    "Is Any Thing Too Hard for the Lord?", "Genesis 18–23",                        "Sarah's laughter, the destruction of Sodom, and the Abrahamic sacrifice",                   "jzLRfH2VC34",  "Jacob and Esau",
+    "\'Is any thing too hard for the Lord?\' That question, asked by God to a laughing Sarah, is at the heart of this week\'s reading. Abraham and Sarah\'s lives were filled with impossible-looking situations. And again and again, God proved that nothing is too hard for Him. As you study, look for the ways God provides when human solutions run out."),
+
+  sk(10, "March 2–8, 2026",       "Jacob and Esau",                      "Genesis 24–33",                        "Isaac, Rebekah, Jacob's ladder, and the covenant passing to a new generation",              "S2QEXPrXuhw",  "Joseph in Egypt",
+    "Isaac loved Rebekah. Jacob loved Rachel. And yet neither of their marriages went the way they expected. Life in the patriarchal family was messy, complicated, and full of conflict — yet God was weaving something through it all. As you read, look for the ways God works through imperfect people and circumstances to fulfill His purposes."),
+
+  sk(11, "March 9–15, 2026",      "Joseph in Egypt",                     "Genesis 37–41",                        "Joseph's coat, Potiphar's house, and his rise in Egypt",                                    "M-vDrXFdbUI",  "Joseph — A Type of Christ",
+    "\'The Lord was with Joseph.\' At each low point in his story — the pit, the slavery, the prison — those quiet words appear. As you read Genesis 37–41 this week, look for the presence of the Lord in Joseph\'s story — and reflect on where He is present in your own."),
+
+  sk(12, "March 16–22, 2026",     "Joseph — A Type of Christ",           "Genesis 42–50",                        "Joseph revealing himself to his brothers and the reunion of Israel's family",               "ia61zgwiy30",  "A Prophet Is Born",
+    "Joseph had every reason to be bitter. His brothers had tried to kill him, sold him, and forgotten about him for years. And yet when the moment of reckoning came, his response was: \'I am Joseph your brother.\' He wept. He forgave. As you read Genesis 42–50, consider what enabled Joseph\'s extraordinary mercy — and what it teaches about the Atonement of Jesus Christ."),
+
+  sk(13, "March 23–29, 2026",     "A Prophet Is Born",                   "Exodus 1–6",                           "Moses' birth, the burning bush, and the great I AM",                                        "fK2M9zpN654",  "Easter — He Will Swallow Up Death",
+    "Moses was not the kind of person you might expect God to call as a deliverer. He had a troubled past, a speech impediment, and doubts. And yet God appeared to him in a burning bush and said: \'I have seen the affliction of my people... and I am come down to deliver them.\' As you read Exodus 1–6, consider what God\'s choice of Moses teaches about how He calls and prepares His servants."),
+
+  sk(14, "Mar 30–Apr 5, 2026",    "He Will Swallow Up Death in Victory", "Easter Week",                          "the Atonement and Resurrection of Jesus Christ, fulfillment of all Old Testament prophecy", null,           "Remember This Day",
+    "This is Easter week. At the center of everything we study in the Old Testament — every covenant, every sacrifice, every prophecy — is the Resurrection of Jesus Christ. The plagues of Egypt, the Passover lamb, the parting of the Red Sea: all foreshadow the deliverance Christ would accomplish through His Atonement. This week we pause to celebrate the fulfillment of every Old Testament type and prophecy."),
+
+  sk(15, "April 6–12, 2026",      "Remember This Day",                   "Exodus 7–13",                          "the ten plagues, Passover, and Israel's deliverance from Egypt",                            null,           "Stand Still and See the Salvation",
+    "The ten plagues of Egypt were not random acts of divine anger. Each plague was a targeted dismantling of an Egyptian god — a demonstration that the God of Israel was more powerful than every deity Egypt worshipped. And the Passover — the blood of a lamb, the family gathered inside, the angel of death passing over — was a type of Christ so precise it takes your breath away. As you read Exodus 7–13, look for Christ in every image."),
+
+  sk(16, "April 13–19, 2026",     "Stand Still and See the Salvation",   "Exodus 14–18",                         "the parting of the Red Sea, manna in the wilderness, and water from the rock",             null,           "I Will Be with Thee",
+    "Israel stood at the edge of the Red Sea with Pharaoh\'s army behind them and certain death before them. And Moses said: \'Fear ye not, stand still, and see the salvation of the Lord.\' Then the sea parted. As you read Exodus 14–18, look for the pattern: God allows His people to reach the edge of what is possible — and then He acts."),
+
+  sk(17, "April 20–26, 2026",     "I Will Be with Thee",                 "Exodus 19–24; 31–34",                  "the Ten Commandments, the golden calf, and Moses seeing God face to face",                  null,           "Holiness to the Lord",
+    "The Ten Commandments were not a punishment. They were an invitation. God had just delivered Israel from Egypt with His mighty arm. Now He invited them into a covenant relationship — to be His people, and He would be their God. As you read Exodus 19–24 this week, look for the love beneath the law."),
+
+  sk(18, "Apr 27–May 3, 2026",    "Holiness to the Lord",                "Exodus 25–30; 35–40; Leviticus",       "the tabernacle and its deep symbolism pointing to Christ",                                  null,           "Rebel Not Against the Lord",
+    "The tabernacle was not just a tent. Every detail — the curtains, the lampstand, the bread, the ark — was a teaching about the Savior. God was essentially building a visual curriculum of the Atonement in fabric and gold and wood, so His people could carry it through the wilderness. As you read Exodus 35–40 and Leviticus, look for Christ in every symbol."),
+
+  sk(19, "May 4–10, 2026",        "Rebel Not Against the Lord",          "Numbers",                              "Israel's wilderness journey, the bronze serpent, and lessons in trust",                    null,           "Beware Lest Thou Forget",
+    "Numbers is the story of a journey that should have taken eleven days and took forty years. The Israelites kept looking back to Egypt instead of forward to Canaan. They complained. They rebelled. And yet God never abandoned them. As you read Numbers this week, consider: in what ways might you be wandering in circles when the promised land is close?"),
+
+  sk(20, "May 11–17, 2026",       "Beware Lest Thou Forget the Lord",    "Deuteronomy",                          "Moses' farewell, the Shema, and the covenant renewed before entering the land",             null,           "Be Strong and of a Good Courage",
+    "\'Hear, O Israel: The Lord our God is one Lord: and thou shalt love the Lord thy God with all thine heart, and with all thy soul, and with all thy might.\' These words — the Shema — were Moses\' summary of everything. As he prepared to die without entering the promised land, Moses gave Israel his final, urgent words: remember, remember, remember. What do you need to remember about God?"),
+
+  sk(21, "May 18–24, 2026",       "Be Strong and of a Good Courage",     "Joshua",                               "Israel crossing the Jordan, the fall of Jericho, and inheriting the promised land",        null,           "The Lord Raised Up a Deliverer",
+    "\'Be strong and of a good courage; be not afraid, neither be thou dismayed: for the Lord thy God is with thee whithersoever thou goest.\' God spoke those words to Joshua as he prepared to lead Israel across the Jordan. It was not a natural moment for courage — it was a moment for fear. But God\'s promise preceded the crossing, not followed it. As you read Joshua, look for the pattern of courage that comes before the miracle."),
+
+  sk(22, "May 25–31, 2026",       "The Lord Raised Up a Deliverer",      "Judges 2–4; 6–8; 13–16",              "the cycle of apostasy and deliverance, Gideon, Samson, and God's patient mercy",            null,           "My Heart Rejoiceth in the Lord",
+    "The book of Judges tells a story on repeat. Israel forgets God. They turn to idols. God allows them to suffer the consequences. They cry out. God raises up a deliverer. Then they forget again. It is one of the most honest portrayals of human nature in scripture. As you read Judges, look not just at Israel\'s failures but at God\'s relentless mercy in responding to every cry."),
+
   {
     weekNumber: 23, year: 2026, dateRange: "June 1–7, 2026",
     title: "My Heart Rejoiceth in the Lord",
@@ -488,8 +541,10 @@ export const WEEKS = [
     days: [
       { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
         content: [
-          { type: "intro", icon: "📖", label: "This Week's Focus",
-            text: "This week we read two of the most beloved stories in the Old Testament. Ruth's devotion to Naomi — 'Whither thou goest, I will go' — and Hannah's anguished prayer for a son that eventually becomes Israel's great prophet Samuel. Both women chose faith when life brought them to their knees." },
+          { type: "manualIntro", icon: "📋", label: "This Week in the CFM Manual",
+            source: "Come Follow Me Manual, June 1–7, 2026",
+            sourceUrl: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/23?lang=eng",
+            text: "Sometimes we imagine that our lives should follow a clear path from beginning to end. The shortest distance between two points is a straight line, after all. And yet life is often full of delays and detours that take us in unexpected directions. Ruth and Hannah surely understood this. Ruth was not an Israelite, but she married one, and when her husband died, she had a choice to make. Would she return to her family and her old, familiar life, or would she embrace the Israelite faith and a new home with her mother-in-law? Hannah's plan for her life was to bear children, but she could not, and that left her 'in bitterness of soul.' As you read about Ruth and Hannah, consider the faith they must have had to travel their unexpected paths. Then think about your own journey. Throughout the trials and surprises between here and your eternal destination, you can learn to say with Hannah, 'My heart rejoiceth in the Lord.'" },
           { type: "scripture", icon: "📜", label: "Opening Verse", reference: "1 Samuel 2:1",
             dailyRef: "Ruth 1–2",
             dailySummary: "Naomi and Ruth return to Bethlehem; Ruth gleans in Boaz's field",
@@ -500,6 +555,8 @@ export const WEEKS = [
             title: "BibleProject: Book of Ruth Overview",
             description: "An 8-minute animated overview of the book of Ruth — covenant loyalty, the kinsman-redeemer, and how this short book points to Jesus Christ.",
             embedId: "0h1eoBeR4Jk" },
+          { type: "intro", icon: "📖", label: "This Week's Focus",
+            text: "This week we read two of the most beloved stories in the Old Testament. Ruth's devotion to Naomi — 'Whither thou goest, I will go' — and Hannah's anguished prayer for a son that eventually becomes Israel's great prophet Samuel. Both women chose faith when life brought them to their knees." },
           { type: "lineUponLine", icon: "🎥", label: "Line Upon Line",
             title: "Ruth & Hannah's Redemption | Come Follow Me 2026",
             description: "Line Upon Line's weekly overview for Ruth and 1 Samuel 1–3 — perfect for families and individuals wanting a quick, engaging introduction to this week's stories.",
@@ -535,9 +592,9 @@ export const WEEKS = [
           { type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
             title: "Episode 23: Ruth; 1 Samuel 1–7 with Sister Lori Newbold",
             description: "Sister Lori Newbold brings her background in theology and mental health to illuminate Ruth's covenant love, Boaz as a type of Christ, Hannah's wordless prayer of grief, and what these women teach us about staying with God when life doesn't go as planned.",
-            podcastUrl: "https://followhim.co/show-note/old-testament-episode-23-2026-ruth-1-samuel-1-7-part-1/",
-            podcast2Url: "https://followhim.co/show-note/old-testament-episode-23-2026-ruth-1-samuel-1-7-part-2/",
-            podcastFavUrl: "https://followhim.co/show-note/old-testament-episode-23-2026-ruth-1-samuel-1-7-favorites/",
+            podcastUrl: "https://followhim.co/old-testament-2026-episodes-21-30/",
+            podcast2Url: "https://followhim.co/old-testament-2026-episodes-21-30/",
+            podcastFavUrl: "https://followhim.co/old-testament-2026-episodes-21-30/",
             spotifyUrl: "https://open.spotify.com/show/15G9TTz8yLp0dQyEcBQ8BY",
             appleUrl: "https://podcasts.apple.com/us/podcast/followhim/id1545433056",
             note: "Part 1 & 2 with Sister Lori Newbold · Favorites is a short 5-min version" },
@@ -674,8 +731,10 @@ export const WEEKS = [
     days: [
       { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
         content: [
-          { type: "intro", icon: "📖", label: "This Week's Focus",
-            text: "David faces a giant with five smooth stones and absolute faith. He later refuses to harm Saul twice — even when he could. And God makes an eternal covenant with his family. This week teaches us that when we trust God completely, He fights our battles and turns unlikely champions into kings." },
+          { type: "manualIntro", icon: "📋", label: "This Week in the CFM Manual",
+            source: "Come Follow Me Manual, June 15–21, 2026",
+            sourceUrl: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/25?lang=eng",
+            text: "Ever since the tribes of Israel had settled in the promised land, the Philistines had been an ongoing threat to their safety. The Lord had delivered them many times in the past, but now the elders of Israel demanded, 'We will have a king … to go out before us, and fight our battles.' So Saul was anointed king. And yet when the menacing giant Goliath hurled his challenge to the armies of Israel, Saul — like the rest of his army — was 'greatly afraid.' On that day, it wasn't King Saul who saved Israel but a humble shepherd boy named David, who was wearing no armor but was clothed with impenetrable faith in the Lord. This battle proved to Israel, and to anyone who has spiritual battles to fight, that 'the Lord saveth not with sword and spear' and that 'the battle is the Lord's.'" },
           { type: "scripture", icon: "📜", label: "Opening Verse", reference: "1 Samuel 17:47",
             dailyRef: "1 Samuel 17",
             dailySummary: "David and Goliath — 'The battle is the Lord's'",
@@ -686,6 +745,8 @@ export const WEEKS = [
             title: "BibleProject: 1 Samuel Overview",
             description: "An animated overview of 1 Samuel — covering David's rise, Goliath, and what it means to trust God in battle. A perfect Sunday introduction.",
             embedId: "QJOju5Dw0V0" },
+          { type: "intro", icon: "📖", label: "This Week's Focus",
+            text: "David faces a giant with five smooth stones and absolute faith. He later refuses to harm Saul twice — even when he could. And God makes an eternal covenant with his family. This week teaches us that when we trust God completely, He fights our battles and turns unlikely champions into kings." },
           { type: "question", icon: "💭", label: "Reflection to Carry This Week",
             text: "What 'Goliath' are you currently facing? What would it look like to approach it with David's confidence — 'the battle is the Lord's'?",
             mode: "both" },
@@ -721,9 +782,9 @@ export const WEEKS = [
           { type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
             title: "Episode 25: 1 Samuel 17–2 Samuel 7 with Brother Mike Madsen",
             description: "Brother Mike Madsen, Program Manager for Gospel Learning and Teaching, takes Hank and John through David and Goliath, Jonathan's sacrifice, David's mercy toward Saul, and finds Christ in a shepherd boy's sling. A remarkable episode on what the battle truly is.",
-            podcastUrl: "https://followhim.co/show-note/old-testament-episode-25-2026-1-samuel-17-2-samuel-7-part-1/",
-            podcast2Url: "https://followhim.co/show-note/old-testament-episode-25-2026-1-samuel-17-2-samuel-7-part-2/",
-            podcastFavUrl: "https://followhim.co/show-note/old-testament-episode-25-2026-1-samuel-17-2-samuel-7-favorites/",
+            podcastUrl: "https://followhim.co/old-testament-2026-episodes-21-30/",
+            podcast2Url: "https://followhim.co/old-testament-2026-episodes-21-30/",
+            podcastFavUrl: "https://followhim.co/old-testament-2026-episodes-21-30/",
             spotifyUrl: "https://open.spotify.com/show/15G9TTz8yLp0dQyEcBQ8BY",
             appleUrl: "https://podcasts.apple.com/us/podcast/followhim/id1545433056",
             note: "Part 1 & 2 with Brother Mike Madsen · Favorites is a short 5-min version" },
@@ -853,33 +914,87 @@ export const WEEKS = [
     ],
     featuredTalkIds: ["holland-lord-i-believe-2013", "eyring-mountains-2012", "nelson-let-god-prevail-2020"],
   }, // June 15–21 — FULLY BUILT
-  sk(26, "June 22–28, 2026",      "Hear Thou in Heaven",                 "2 Samuel 11–12; 1 Kings 3; 8–11",     "David's fall with Bathsheba, Solomon's wisdom, the temple dedication, and Solomon's downfall", null,          "If the Lord Be God, Follow Him"),
-  sk(27, "Jun 29–Jul 5, 2026",    "If the Lord Be God, Follow Him",      "1 Kings 17–19",                        "Elijah and the widow, fire from heaven on Mount Carmel, and the still small voice",          null,           "There Is a Prophet in Israel"),
-  sk(28, "July 6–12, 2026",       "There Is a Prophet in Israel",        "2 Kings 2–7",                          "Elisha receives the mantle, heals Naaman, and opens the servant's eyes to heaven's armies",  null,           "I Have Found the Book of the Law"),
-  sk(29, "July 13–19, 2026",      "I Have Found the Book of the Law",    "2 Kings 17–25; 2 Chronicles 29–36",   "the fall of Israel, Hezekiah's reforms, and Josiah finding the lost scriptures",             null,           "I Will Praise Thee"),
-  sk(30, "July 20–26, 2026",      "I Will Praise Thee",                  "Psalms",                               "Israel's hymnbook — lament, praise, trust, and the messianic Psalms",                      null,           "The Fear of the Lord Is the Beginning of Wisdom"),
-  sk(31, "Jul 27–Aug 2, 2026",    "The Fear of the Lord",                "Proverbs; Ecclesiastes",               "wisdom literature — how to live well and find meaning in God",                              null,           "I Know That My Redeemer Liveth"),
-  sk(32, "August 3–9, 2026",      "I Know That My Redeemer Liveth",      "Job",                                  "Job's suffering, his friends' bad theology, and God speaking from the whirlwind",            null,           "Wo unto Them That Call Evil Good"),
-  sk(33, "August 10–16, 2026",    "Wo unto Them That Call Evil Good",    "Isaiah 1–12",                          "Isaiah's vision of Zion, his call, the Immanuel prophecy, and the Branch",                  null,           "Unto Us a Child Is Born"),
-  sk(34, "August 17–23, 2026",    "Unto Us a Child Is Born",             "Isaiah 13–35",                         "Isaiah's oracles against the nations and the suffering servant",                            null,           "Hearken unto Me"),
-  sk(35, "Aug 24–30, 2026",       "Hearken unto Me",                     "Isaiah 36–66",                         "'How beautiful upon the mountains' and the new covenant",                                   null,           "The Lord's Hand Is Stretched Out Still"),
-  sk(36, "Aug 31–Sep 6, 2026",    "The Lord's Hand Is Stretched Out",    "Jeremiah 1–23",                        "Jeremiah's call, his laments, and God's word like fire in his bones",                       null,           "I Will Make a New Covenant"),
-  sk(37, "September 7–13, 2026",  "I Will Make a New Covenant",          "Jeremiah 24–52; Lamentations",         "the new covenant written on hearts and the grief of Jerusalem's fall",                      null,           "I Will Give Them One Heart"),
-  sk(38, "September 14–20, 2026", "I Will Give Them One Heart",          "Ezekiel 1–24",                         "Ezekiel's chariot vision and the watchman on the wall",                                     null,           "A New Heart Will I Give You"),
-  sk(39, "Sep 21–27, 2026",       "A New Heart Will I Give You",         "Ezekiel 25–48",                        "the valley of dry bones, the good shepherd, and the millennial temple vision",               null,           "Come, I Will Show Thee Things"),
-  sk(40, "Sep 28–Oct 4, 2026",    "Come, I Will Show Thee",              "Daniel 1–6",                           "Daniel in Babylon, the fiery furnace, and the lion's den",                                  null,           "Seal the Book unto the End"),
-  sk(41, "October 5–11, 2026",    "Seal the Book unto the End",          "Daniel 7–12",                          "Daniel's apocalyptic visions of world empires and the Ancient of Days",                     null,           "The Lord Is There"),
-  sk(42, "October 12–18, 2026",   "The Lord Is There",                   "Hosea; Joel; Amos; Obadiah; Jonah",    "God's love that pursues, the day of the Lord, and Jonah's flight",                          null,           "Seek Good and Not Evil"),
-  sk(43, "October 19–25, 2026",   "Seek Good and Not Evil",              "Micah; Nahum; Habakkuk; Zephaniah",    "justice, mercy, and walking humbly with God",                                               null,           "Consider Your Ways"),
-  sk(44, "Oct 26–Nov 1, 2026",    "Consider Your Ways",                  "Haggai; Zechariah",                    "rebuilding the temple and Zechariah's messianic visions",                                   null,           "Behold, I Will Send My Messenger"),
-  sk(45, "November 2–8, 2026",    "Behold, I Will Send My Messenger",    "Malachi",                              "the final Old Testament prophet — tithing, Elijah's return, and the refiner's fire",        null,           "Return unto Me"),
-  sk(46, "November 9–15, 2026",   "Return unto Me",                      "Ezra; Nehemiah",                       "the return from exile and rebuilding Jerusalem's walls",                                     null,           "Who Knoweth Whether Thou Art Come"),
-  sk(47, "November 16–22, 2026",  "Who Knoweth Whether Thou Art Come",   "Esther",                               "Esther's courage and God's providence behind the scenes",                                   null,           "Christmas Prep — Isaiah's Prophecies"),
-  sk(48, "Nov 23–29, 2026",       "Christmas Preparation — Isaiah",      "Isaiah 7–9; 11; 53",                   "the great Messianic prophecies of Isaiah pointing to Christ's birth and mission",            null,           "He Shall Come"),
-  sk(49, "November 30–Dec 6, 2026","He Shall Come",                      "Micah 5; Zechariah 9–14",              "the prophecy of a ruler born in Bethlehem and the triumphal entry",                         null,           "I Will Not Forget Thee"),
-  sk(50, "December 7–13, 2026",   "I Will Not Forget Thee",              "Isaiah 40–42; 49",                     "the comfort of God and Israel as His witnesses",                                            null,           "The Savior Is Born"),
-  sk(51, "December 14–20, 2026",  "The Savior Is Born",                  "Luke 2; Matthew 1–2",                  "the Nativity and the fulfillment of Old Testament prophecy",                                null,           "Year-End Reflection"),
-  sk(52, "December 21–27, 2026",  "Year-End Reflection",                 "Selected Old Testament Highlights",    "a year of walking with the prophets and seeing Jesus Christ in every page",                 null,           null),
+  sk(26, "June 22–28, 2026",      "Hear Thou in Heaven",                 "2 Samuel 11–12; 1 Kings 3; 8–11",     "David's fall with Bathsheba, Solomon's wisdom, the temple dedication, and Solomon's downfall", null,          "If the Lord Be God, Follow Him",
+    "Saul, David, and Solomon, the first three kings of Israel, all started out with so much promise. Humble, courageous, and dedicated to God, each began his reign with great faith. But power and prosperity have a way of exposing weaknesses that hard times conceal. As you read this week about David\'s fall and Solomon\'s wisdom and eventual downfall, consider what these stories teach about staying true to God when life becomes comfortable."),
+
+  sk(27, "Jun 29–Jul 5, 2026",    "If the Lord Be God, Follow Him",      "1 Kings 17–19",                        "Elijah and the widow, fire from heaven on Mount Carmel, and the still small voice",          null,           "There Is a Prophet in Israel",
+    "The house of Israel was in disarray. The kingdom had divided, with ten tribes forming the Northern Kingdom of Israel and two tribes forming the Southern Kingdom of Judah. But worse than their separation from each other was both kingdoms\' separation from their covenants. In this setting, the Lord called Elijah to be a prophet. His life shows that a person can have great faith in the Lord even in bad circumstances."),
+
+  sk(28, "July 6–12, 2026",       "There Is a Prophet in Israel",        "2 Kings 2–7",                          "Elisha receives the mantle, heals Naaman, and opens the servant's eyes to heaven's armies",  null,           "I Have Found the Book of the Law",
+    "A prophet\'s main mission is to teach and testify of the Savior Jesus Christ. Our record of the prophet Elisha, however, doesn\'t include much of his teaching or testifying. What the record does include is the miracles Elisha performed — raising a child from the dead, feeding a multitude with just a little food, healing a leper. These miracles foreshadow the ministry of Jesus Christ, who would do these same things and more."),
+
+  sk(29, "July 13–19, 2026",      "I Have Found the Book of the Law",    "2 Kings 17–25; 2 Chronicles 29–36",   "the fall of Israel, Hezekiah's reforms, and Josiah finding the lost scriptures",             null,           "I Will Praise Thee",
+    "Despite having kings to lead them and prophets to guide them, Israel and Judah repeatedly fell into idolatry. Eventually, God allowed both kingdoms to be conquered and their people taken captive. But even in exile, God\'s covenant promises remained. As you read 2 Kings 16–25, look for the faithful few who clung to their covenants even when their nation abandoned them."),
+
+  sk(30, "July 20–26, 2026",      "I Will Praise Thee",                  "Psalms",                               "Israel's hymnbook — lament, praise, trust, and the messianic Psalms",                      null,           "The Fear of the Lord Is the Beginning of Wisdom",
+    "After Israel\'s division and years of apostasy, God raised up a series of reforming kings in Judah who sought to bring the people back to their covenants. As you read 2 Chronicles 14–20; 26; 30, look for what these kings did when they turned to God, and consider what \'reform\' might look like in your own life."),
+
+  sk(31, "Jul 27–Aug 2, 2026",    "The Fear of the Lord",                "Proverbs; Ecclesiastes",               "wisdom literature — how to live well and find meaning in God",                              null,           "I Know That My Redeemer Liveth",
+    "After seventy years of captivity in Babylon, God fulfilled His promise: a remnant of Israel returned to the promised land. But returning was not easy. They had to rebuild the temple, the walls of Jerusalem, and their commitment to God\'s law. As you read Ezra and Nehemiah, consider: what does it look like to rebuild something sacred that has fallen into ruin?"),
+
+  sk(32, "August 3–9, 2026",      "I Know That My Redeemer Liveth",      "Job",                                  "Job's suffering, his friends' bad theology, and God speaking from the whirlwind",            null,           "Wo unto Them That Call Evil Good",
+    "The book of Esther never mentions God by name. And yet His hand is visible in every turn of the story — in the unlikely rise of a Jewish orphan to become queen, in the sleepless night of a king, in the timing of a feast. As you read Esther, look for the ways God works through what looks like coincidence."),
+
+  sk(33, "August 10–16, 2026",    "Wo unto Them That Call Evil Good",    "Isaiah 1–12",                          "Isaiah's vision of Zion, his call, the Immanuel prophecy, and the Branch",                  null,           "Unto Us a Child Is Born",
+    "The book of Job begins with a question: does Job love God for who God is, or only for what God gives him? Satan insists it is the latter. The Lord allows Job to be tested — and Job\'s faith, though shaken, holds. As you study Job, consider your own faith: is it contingent on blessings, or rooted in something deeper?"),
+
+  sk(34, "August 17–23, 2026",    "Unto Us a Child Is Born",             "Isaiah 13–35",                         "Isaiah's oracles against the nations and the suffering servant",                            null,           "Hearken unto Me",
+    "The Psalms are Israel\'s hymnal and prayer book. They express every human emotion before God — joy, grief, despair, wonder, gratitude, anger, longing. What makes them remarkable is not their polish but their honesty. As you read the Psalms this week, notice how the writers bring everything to God — not just their best moments, but their most broken ones."),
+
+  sk(35, "Aug 24–30, 2026",       "Hearken unto Me",                     "Isaiah 36–66",                         "'How beautiful upon the mountains' and the new covenant",                                   null,           "The Lord's Hand Is Stretched Out Still",
+    "\'The fear of the Lord is the beginning of wisdom.\' So begins the book of Proverbs. Proverbs, Ecclesiastes, and the Song of Solomon approach the big questions of life through observation and experience. As you read this week, consider what wisdom looks like in your daily life — and what the fear of the Lord actually means."),
+
+  sk(36, "Aug 31–Sep 6, 2026",    "The Lord's Hand Is Stretched Out",    "Jeremiah 1–23",                        "Jeremiah's call, his laments, and God's word like fire in his bones",                       null,           "I Will Make a New Covenant",
+    "Isaiah is the most-quoted prophet in the Book of Mormon and the New Testament. He saw the Savior. He described the suffering servant. He envisioned the gathering of Israel. His language is dense and poetic and sometimes difficult — and utterly worth the effort. As you read Isaiah 1–12, look for the Savior on every page. He is there."),
+
+  sk(37, "September 7–13, 2026",  "I Will Make a New Covenant",          "Jeremiah 24–52; Lamentations",         "the new covenant written on hearts and the grief of Jerusalem's fall",                      null,           "I Will Give Them One Heart",
+    "Isaiah\'s vision continues — and expands. From oracles against the nations to the vision of the peaceable kingdom, from the suffering servant to \'How beautiful upon the mountains are the feet of him that bringeth good tidings\' — Isaiah sees the whole sweep of history. As you read Isaiah 13–35, look for the hope that shines through even the darkest passages."),
+
+  sk(38, "September 14–20, 2026", "I Will Give Them One Heart",          "Ezekiel 1–24",                         "Ezekiel's chariot vision and the watchman on the wall",                                     null,           "A New Heart Will I Give You",
+    "\'Comfort ye, comfort ye my people, saith your God.\' The second half of Isaiah opens with these words — addressed to a people in exile who felt abandoned. The comfort Isaiah offers is not shallow comfort. It is the deep comfort of knowing who God is. As you read Isaiah 36–66, listen for the voice of One who knows your name and has not forgotten you."),
+
+  sk(39, "Sep 21–27, 2026",       "A New Heart Will I Give You",         "Ezekiel 25–48",                        "the valley of dry bones, the good shepherd, and the millennial temple vision",               null,           "Come, I Will Show Thee Things",
+    "Jeremiah was called to prophesy the destruction of Jerusalem — and nobody wanted to hear it. He was rejected, imprisoned, and left in a cistern to die. He wept so much he became known as \'the weeping prophet.\' And yet he never stopped. As you read Jeremiah, consider: what does faithfulness look like when no one is listening?"),
+
+  sk(40, "Sep 28–Oct 4, 2026",    "Come, I Will Show Thee",              "Daniel 1–6",                           "Daniel in Babylon, the fiery furnace, and the lion's den",                                  null,           "Seal the Book unto the End",
+    "Ezekiel was among the first Israelites taken into Babylonian captivity. From that foreign land, he received some of the most vivid visions in all of scripture — the wheel within a wheel, the valley of dry bones, the river flowing from the temple. As you read Ezekiel, consider: what does it mean to receive revelation in a place of exile?"),
+
+  sk(41, "October 5–11, 2026",    "Seal the Book unto the End",          "Daniel 7–12",                          "Daniel's apocalyptic visions of world empires and the Ancient of Days",                     null,           "The Lord Is There",
+    "Daniel was a young man taken captive to Babylon. But Daniel purposed in his heart that he would not defile himself. From that one quiet decision, a lifetime of faithfulness followed — and visions that would shape Jewish and Christian understanding of history for millennia. As you read Daniel, consider what \'purposing in your heart\' looks like in your own life."),
+
+  sk(42, "October 12–18, 2026",   "The Lord Is There",                   "Hosea; Joel; Amos; Obadiah; Jonah",    "God's love that pursues, the day of the Lord, and Jonah's flight",                          null,           "Seek Good and Not Evil",
+    "The minor prophets — Hosea, Joel, Amos, Obadiah, Jonah — are called \'minor\' not because they are unimportant but because their books are short. Together they cover the breadth of God\'s dealings with Israel and the nations. As you read this week, listen for the consistent heartbeat: God wants His people back."),
+
+  sk(43, "October 19–25, 2026",   "Seek Good and Not Evil",              "Micah; Nahum; Habakkuk; Zephaniah",    "justice, mercy, and walking humbly with God",                                               null,           "Consider Your Ways",
+    "\'What doth the Lord require of thee, but to do justly, and to love mercy, and to walk humbly with thy God?\' Those words from Micah 6:8 are among the most memorable in all the prophets. This week\'s reading includes Micah, Nahum, Habakkuk, and Zephaniah — four prophets whose messages speak with startling directness to our own lives."),
+
+  sk(44, "Oct 26–Nov 1, 2026",    "Consider Your Ways",                  "Haggai; Zechariah",                    "rebuilding the temple and Zechariah's messianic visions",                                   null,           "Behold, I Will Send My Messenger",
+    "After seventy years of exile, the first Jewish exiles began returning to Jerusalem — and found a city in ruins. The prophets Haggai and Zechariah were raised up to encourage them. Haggai\'s message was practical: build the temple. Zechariah\'s was visionary: see what God is going to do. Together they remind us that faithfulness requires both action and vision."),
+
+  sk(45, "November 2–8, 2026",    "Behold, I Will Send My Messenger",    "Malachi",                              "the final Old Testament prophet — tithing, Elijah's return, and the refiner's fire",        null,           "Return unto Me",
+    "Malachi is the last voice in the Old Testament. After him, there is four centuries of prophetic silence — until John the Baptist cries in the wilderness. His message is pointed: the people have been negligent. But it ends not with condemnation but with a promise: \'Behold, I will send you Elijah the prophet before the coming of the great and dreadful day of the Lord.\'"),
+
+  sk(46, "November 9–15, 2026",   "Return unto Me",                      "Ezra; Nehemiah",                       "the return from exile and rebuilding Jerusalem's walls",                                     null,           "Who Knoweth Whether Thou Art Come",
+    "The return from Babylonian exile was one of the great miracles of Old Testament history. But rebuilding was hard. Ezra and Nehemiah led the effort to reconstruct not just walls and a temple but a covenant people. As you read this week, consider what \'rebuilding\' looks like in your own spiritual life."),
+
+  sk(47, "November 16–22, 2026",  "Who Knoweth Whether Thou Art Come",   "Esther",                               "Esther's courage and God's providence behind the scenes",                                   null,           "Christmas Prep — Isaiah's Prophecies",
+    "\'Who knoweth whether thou art come to the kingdom for such a time as this?\' Those words, spoken to Esther by her cousin Mordecai, have become one of the most beloved phrases in all of scripture. The book of Esther is the story of a young woman who discovered that her position, her courage, and her moment in history were not accidents."),
+
+  sk(48, "Nov 23–29, 2026",       "Christmas Preparation — Isaiah",      "Isaiah 7–9; 11; 53",                   "the great Messianic prophecies of Isaiah pointing to Christ's birth and mission",            null,           "He Shall Come",
+    "As we approach the end of the year, the Old Testament leads us toward Christmas — through the great prophetic voices of Isaiah and Micah. \'Unto us a child is born, unto us a son is given: and the government shall be upon his shoulder: and his name shall be called Wonderful, Counsellor, The mighty God, The everlasting Father, The Prince of Peace.\'"),
+
+  sk(49, "November 30–Dec 6, 2026","He Shall Come",                      "Micah 5; Zechariah 9–14",              "the prophecy of a ruler born in Bethlehem and the triumphal entry",                         null,           "I Will Not Forget Thee",
+    "\'He shall come\' — that promise runs through the entire Old Testament. In this week\'s reading, we hear it from Isaiah, Micah, and Zechariah: a ruler born in Bethlehem, a king who comes riding on a donkey, a servant who is pierced for our transgressions. As you read, marvel at how precisely these ancient words were fulfilled."),
+
+  sk(50, "December 7–13, 2026",   "I Will Not Forget Thee",              "Isaiah 40–42; 49",                     "the comfort of God and Israel as His witnesses",                                            null,           "The Savior Is Born",
+    "\'And she brought forth her firstborn son, and wrapped him in swaddling clothes, and laid him in a manger; because there was no room for them in the inn.\' The birth of Jesus Christ is the fulfillment of every promise, prophecy, sacrifice, and covenant in the Old Testament. This week, as you read the Nativity accounts, pause on each detail and ask: where was this promised in the Old Testament?"),
+
+  sk(51, "December 14–20, 2026",  "The Savior Is Born",                  "Luke 2; Matthew 1–2",                  "the Nativity and the fulfillment of Old Testament prophecy",                                null,           "Year-End Reflection",
+    "\'In the beginning was the Word, and the Word was with God, and the Word was God.\' John\'s Gospel begins not with a manger but before creation itself — pointing back to Genesis and forward to eternity. As you read John 1 this Christmas season, marvel at who this Word is, and what it means that He became flesh and dwelt among us."),
+
+  sk(52, "December 21–27, 2026",  "Year-End Reflection",                 "Selected Old Testament Highlights",    "a year of walking with the prophets and seeing Jesus Christ in every page",                 null,           null,
+    "You have studied the Old Testament for a year. You have walked with Adam and Eve, Abraham and Sarah, Moses, Joshua, the judges, the kings, and the prophets. And through all of it — the faith, the failure, the exile, the return — you have seen one thing on every page: God keeps His promises. Take time to reflect on what He has taught you this year."),
+
 ];
 
 // ── Get current week index by date ───────────────────────────────────────────

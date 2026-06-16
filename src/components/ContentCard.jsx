@@ -109,6 +109,29 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             }}>📱 Opens Gospel Library app · 🌐 Browser as backup</p>
           </>)}
 
+          {/* ── Manual Intro ── */}
+          {item.type === "manualIntro" && (
+            <div>
+              <p style={{
+                fontFamily: "'EB Garamond', serif", fontSize: 17,
+                lineHeight: 1.8, color: "#3A1038", margin: "0 0 14px",
+              }}>{item.text}</p>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <a href={item.sourceUrl} target="_blank" rel="noreferrer" style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 12, fontWeight: 700, color: "#4A1942",
+                  background: "#fff", border: "1.5px solid #9B59B6",
+                  padding: "6px 12px", borderRadius: 20, textDecoration: "none",
+                  fontFamily: "'Source Sans 3', sans-serif",
+                }}>📖 Open CFM Manual →</a>
+              </div>
+              <p style={{
+                fontSize: 11, color: "#BBB", margin: "8px 0 0", lineHeight: 1.5,
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>📋 {item.source}</p>
+            </div>
+          )}
+
           {/* ── Insight / intro / review / nextweek ── */}
           {["insight","intro","review","nextweek"].includes(item.type) && (
             <p style={{
