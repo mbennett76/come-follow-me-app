@@ -29,8 +29,10 @@ REQUIREMENTS:
      text: "A key verse from this passage in KJV",
      url: "gospellibrary://content/scriptures/ot/[book-slug]/[chapter]",
      webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/[book-slug]/[chapter]?lang=eng" }
-8. Conference talks: choose talks that directly relate to this week's themes. Include url AND fallbackUrl
-9. YouTube embedIds: ONLY use verified IDs. Search YouTube for "Line Upon Line Come Follow Me ${nextWeek.scriptureRange}" or "Latter Day Kids Come Follow Me ${nextWeek.scriptureRange}" and verify the video exists before using the ID
+8. **CRITICAL — CFM MANUAL TALK RECOMMENDATIONS**: Before choosing conference talks, fetch this URL and find every General Conference talk cited in the "Ideas for Learning" section:
+   https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/${String(nextWeek.weekNumber).padStart(2,'0')}?lang=eng
+   Prioritize those exact talks first in your daily content and in featuredTalkIds. If a cited talk is not in the Available IDs list below, add it as a full conference card with correct URL and fallbackUrl.
+9. YouTube embedIds: ONLY use verified IDs. Search YouTube for "Line Upon Line Come Follow Me ${nextWeek.scriptureRange}" or "BibleProject ${nextWeek.scriptureRange.split(';')[0].trim()} overview" and verify the video exists before using the ID
 
 PODCAST STRUCTURE (use these exact URLs):
 { type: "podcast", icon: "🎙️", label: "Follow Him Podcast",
@@ -67,10 +69,15 @@ keyVerses: [
 ],
 featuredTalkIds: ["talk-id-1", "talk-id-2", "talk-id-3"],
 // Use the id field from the ALL_CONFERENCE_TALKS array in weekData.js
-// Available IDs: nelson-hear-him-2020, monson-come-follow-me-2013, holland-lord-i-believe-2013,
+// Available IDs (prioritize whichever the CFM manual recommends for this week):
+// nelson-hear-him-2020, monson-come-follow-me-2013, holland-lord-i-believe-2013,
 // eyring-mountains-2012, bednar-spirit-revelation-2011, nelson-momentum-2022,
 // holland-broken-things-2006, uchtdorf-forget-me-not-2011, nelson-let-god-prevail-2020,
-// bednar-heart-mighty-change-2012, oaks-good-better-best-2007, eyring-remembrance-gratitude-1989
+// bednar-heart-mighty-change-2012, oaks-good-better-best-2007, eyring-remembrance-gratitude-1989,
+// wright-abide-day-2023, johnson-invite-christ-2021, holland-fear-not-2022,
+// christofferson-relationship-god-2022, rasband-divine-design-2017, uchtdorf-lift-where-you-stand-2008,
+// nelson-spiritual-momentum-2022, andersen-steady-faithful-2022, cook-looking-beyond-mark-2023,
+// nelson-joy-spiritual-survival-2016, eyring-prayer-2001, bednar-watch-over-and-strengthen-2022
 
 EXAMPLE CONTENT ITEM STRUCTURE:
 ${templateContent}
