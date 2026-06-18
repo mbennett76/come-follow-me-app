@@ -180,7 +180,7 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             <p style={{
               fontSize: 11, color: "#BBB", margin: "8px 0 0",
               fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
-            }}>Artworks shown are in the public domain. For LDS commissioned art, tap "View LDS Art" above.</p>
+            }}>Images from the Come Follow Me manual and public domain sources. Tap "Browse More LDS Art" to open the full Gospel Library art collection.</p>
           </>)}
 
           {/* ── Map Location ── */}
@@ -221,18 +221,18 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
                 style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
                 loading="lazy"
                 allowFullScreen
-                src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBoxI55pCO3O-ktFqIUGc5SACA0x5KshUo&center=${item.primaryLat},${item.primaryLng}&zoom=${item.primaryZoom}&maptype=terrain`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${item.primaryLng - 1.5},${item.primaryLat - 1.0},${item.primaryLng + 1.5},${item.primaryLat + 1.0}&layer=mapnik&marker=${item.primaryLat},${item.primaryLng}`}
                 title="Scripture location map"
               />
             </div>
-            <a href={`https://www.google.com/maps/@${item.primaryLat},${item.primaryLng},${item.primaryZoom}z`}
+            <a href={`https://www.openstreetmap.org/?mlat=${item.primaryLat}&mlon=${item.primaryLng}#map=${item.primaryZoom}/${item.primaryLat}/${item.primaryLng}`}
               target="_blank" rel="noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 13, fontWeight: 700, color: "#1A3A5C",
                 background: "#fff", border: "1.5px solid #2980B9",
                 padding: "7px 13px", borderRadius: 20, textDecoration: "none",
                 fontFamily: "'Source Sans 3', sans-serif",
-              }}>🗺️ Open in Google Maps →</a>
+              }}>🗺️ Open in OpenStreetMap →</a>
             <p style={{
               fontSize: 11, color: "#BBB", margin: "8px 0 0",
               fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
