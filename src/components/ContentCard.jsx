@@ -132,6 +132,201 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             </div>
           )}
 
+          {/* ── Artwork ── */}
+          {item.type === "artwork" && (<>
+            {item.paintings && item.paintings.map((p, i) => (
+              <div key={i} style={{
+                marginBottom: i < item.paintings.length - 1 ? 20 : 12,
+                borderRadius: 12, overflow: "hidden",
+                border: "1px solid #E8D5C0", background: "#FDF8F4",
+              }}>
+                <img
+                  src={p.imageUrl}
+                  alt={p.title}
+                  style={{ width: "100%", display: "block", maxHeight: 280, objectFit: "cover" }}
+                  onError={e => { e.target.style.display = "none"; }}
+                />
+                <div style={{ padding: "10px 14px" }}>
+                  <div style={{
+                    fontFamily: "'EB Garamond', serif", fontSize: 16,
+                    fontWeight: 600, color: "#3D1A00", marginBottom: 2,
+                  }}>{p.title}</div>
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
+                    color: "#C0622D", fontWeight: 700, marginBottom: 6,
+                  }}>{p.artist} · {p.year}</div>
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+                    color: "#666", lineHeight: 1.6, marginBottom: 8,
+                  }}>{p.description}</div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <a href={p.wikiUrl} target="_blank" rel="noreferrer" style={{
+                      fontSize: 11, color: "#C0622D", fontWeight: 600,
+                      textDecoration: "none", fontFamily: "'Source Sans 3', sans-serif",
+                    }}>🖼️ View full image (Wikimedia Commons) · {p.license}</a>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
+              <a href={item.gospelLibraryUrl} style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 13, fontWeight: 700, color: "#3D1A00",
+                background: "#fff", border: "1.5px solid #C0622D",
+                padding: "7px 13px", borderRadius: 20, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>📱 {item.gospelLibraryLabel}</a>
+            </div>
+            <p style={{
+              fontSize: 11, color: "#BBB", margin: "8px 0 0",
+              fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
+            }}>Artworks shown are in the public domain. For LDS commissioned art, tap "View LDS Art" above.</p>
+          </>)}
+
+          {/* ── Map Location ── */}
+          {item.type === "mapLocation" && (<>
+            <p style={{
+              fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+              color: "#555", lineHeight: 1.7, margin: "0 0 12px",
+            }}>{item.description}</p>
+            {item.locations && item.locations.length > 0 && (
+              <div style={{ marginBottom: 12 }}>
+                {item.locations.map((loc, i) => (
+                  <div key={i} style={{
+                    display: "flex", gap: 10, alignItems: "flex-start",
+                    padding: "8px 0",
+                    borderBottom: i < item.locations.length - 1 ? "1px solid #E8F2FA" : "none",
+                  }}>
+                    <span style={{ fontSize: 16, flexShrink: 0, marginTop: 2 }}>📍</span>
+                    <div>
+                      <div style={{
+                        fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+                        fontWeight: 700, color: "#1A3A5C",
+                      }}>{loc.name}</div>
+                      <div style={{
+                        fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
+                        color: "#777", lineHeight: 1.5,
+                      }}>{loc.note}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{
+              borderRadius: 10, overflow: "hidden",
+              border: "1.5px solid #2980B9", marginBottom: 10,
+              position: "relative", paddingBottom: "56.25%", height: 0,
+            }}>
+              <iframe
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBoxI55pCO3O-ktFqIUGc5SACA0x5KshUo&center=${item.primaryLat},${item.primaryLng}&zoom=${item.primaryZoom}&maptype=terrain`}
+                title="Scripture location map"
+              />
+            </div>
+            <a href={`https://www.google.com/maps/@${item.primaryLat},${item.primaryLng},${item.primaryZoom}z`}
+              target="_blank" rel="noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 13, fontWeight: 700, color: "#1A3A5C",
+                background: "#fff", border: "1.5px solid #2980B9",
+                padding: "7px 13px", borderRadius: 20, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif",
+              }}>🗺️ Open in Google Maps →</a>
+            <p style={{
+              fontSize: 11, color: "#BBB", margin: "8px 0 0",
+              fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
+            }}>Tap any location above to explore it. Modern place names shown — ancient borders differed.</p>
+          </>)}
+
+          {/* ── Timeline ── */}
+          {item.type === "timeline" && (<>
+            <div style={{
+              background: "#4A3000", borderRadius: 10, padding: "10px 14px", marginBottom: 14,
+            }}>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+                fontWeight: 700, color: "#D4A017", letterSpacing: "0.1em",
+                textTransform: "uppercase", marginBottom: 2,
+              }}>📅 {item.currentPeriod} · {item.approximateDate}</div>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+                color: "#F5E4B0", lineHeight: 1.6,
+              }}>{item.biblicalContext}</div>
+            </div>
+
+            {/* Visual timeline strip */}
+            <div style={{
+              background: "#FFF8E7", borderRadius: 10, padding: "12px 14px", marginBottom: 14,
+              border: "1px solid #E8D5A0",
+            }}>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+                fontWeight: 700, color: "#7B5E00", textTransform: "uppercase",
+                letterSpacing: "0.1em", marginBottom: 10,
+              }}>Biblical Timeline</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {item.timeline && item.timeline.filter(e => e.type === "biblical").map((e, i) => (
+                  <div key={i} style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                  }}>
+                    <div style={{
+                      width: 10, height: 10, borderRadius: "50%", flexShrink: 0,
+                      background: e.highlight ? "#D4A017" : e.past ? "#CCC" : e.current ? "#8B6914" : "#DDD",
+                      border: e.highlight ? "2px solid #4A3000" : "none",
+                    }} />
+                    <div style={{
+                      fontFamily: "'Source Sans 3', sans-serif",
+                      fontSize: e.highlight ? 14 : 12,
+                      fontWeight: e.highlight ? 700 : 400,
+                      color: e.highlight ? "#4A3000" : e.past ? "#AAA" : "#666",
+                    }}>{e.label}</div>
+                    <div style={{
+                      marginLeft: "auto", fontFamily: "'Source Sans 3', sans-serif",
+                      fontSize: 11, color: "#AAA",
+                    }}>{e.date}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* World context */}
+            <div style={{
+              background: "#F0F7FA", borderRadius: 10, padding: "12px 14px",
+              border: "1px solid #BDD8E8",
+            }}>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 11,
+                fontWeight: 700, color: "#1A3A5C", textTransform: "uppercase",
+                letterSpacing: "0.1em", marginBottom: 8,
+              }}>🌍 World Context</div>
+              <p style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 13,
+                color: "#444", lineHeight: 1.7, margin: "0 0 10px",
+              }}>{item.worldContext}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {item.timeline && item.timeline.filter(e => e.type === "world").map((e, i) => (
+                  <div key={i} style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                  }}>
+                    <div style={{
+                      width: 8, height: 8, borderRadius: "50%", flexShrink: 0,
+                      background: "#2980B9",
+                    }} />
+                    <div style={{
+                      fontFamily: "'Source Sans 3', sans-serif",
+                      fontSize: 12, color: "#555",
+                    }}>{e.label}</div>
+                    <div style={{
+                      marginLeft: "auto", fontFamily: "'Source Sans 3', sans-serif",
+                      fontSize: 11, color: "#AAA",
+                    }}>{e.date}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>)}
+
           {/* ── Insight / intro / review / nextweek ── */}
           {["insight","intro","review","nextweek"].includes(item.type) && (
             <p style={{
