@@ -169,13 +169,13 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
               </div>
             ))}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
-              <a href={item.gospelLibraryUrl} style={{
+              <a href={item.gospelLibraryUrl} target="_blank" rel="noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 13, fontWeight: 700, color: "#3D1A00",
                 background: "#fff", border: "1.5px solid #C0622D",
                 padding: "7px 13px", borderRadius: 20, textDecoration: "none",
                 fontFamily: "'Source Sans 3', sans-serif",
-              }}>📱 {item.gospelLibraryLabel}</a>
+              }}>🎨 {item.gospelLibraryLabel}</a>
             </div>
             <p style={{
               fontSize: 11, color: "#BBB", margin: "8px 0 0",
@@ -187,56 +187,52 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
           {item.type === "mapLocation" && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-              color: "#555", lineHeight: 1.7, margin: "0 0 12px",
+              color: "#555", lineHeight: 1.7, margin: "0 0 14px",
             }}>{item.description}</p>
-            {item.locations && item.locations.length > 0 && (
-              <div style={{ marginBottom: 12 }}>
-                {item.locations.map((loc, i) => (
-                  <div key={i} style={{
-                    display: "flex", gap: 10, alignItems: "flex-start",
-                    padding: "8px 0",
-                    borderBottom: i < item.locations.length - 1 ? "1px solid #E8F2FA" : "none",
-                  }}>
-                    <span style={{ fontSize: 16, flexShrink: 0, marginTop: 2 }}>📍</span>
-                    <div>
-                      <div style={{
-                        fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-                        fontWeight: 700, color: "#1A3A5C",
-                      }}>{loc.name}</div>
-                      <div style={{
-                        fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-                        color: "#777", lineHeight: 1.5,
-                      }}>{loc.note}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div style={{
-              borderRadius: 10, overflow: "hidden",
-              border: "1.5px solid #2980B9", marginBottom: 10,
-              position: "relative", paddingBottom: "56.25%", height: 0,
-            }}>
-              <iframe
-                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${item.primaryLng - 1.5},${item.primaryLat - 1.0},${item.primaryLng + 1.5},${item.primaryLat + 1.0}&layer=mapnik&marker=${item.primaryLat},${item.primaryLng}`}
-                title="Scripture location map"
-              />
-            </div>
+
+            {/* Individual clickable location pins */}
+            {item.locations && item.locations.map((loc, i) => (
+              <a key={i}
+                href={`https://www.openstreetmap.org/?mlat=${loc.lat}&mlon=${loc.lng}#map=12/${loc.lat}/${loc.lng}&layers=C`}
+                target="_blank" rel="noreferrer"
+                style={{
+                  display: "flex", gap: 12, alignItems: "flex-start",
+                  padding: "10px 12px", marginBottom: 8,
+                  background: "#EBF4FB", borderRadius: 10,
+                  border: "1.5px solid #AED6F1", textDecoration: "none",
+                }}>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>📍</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+                    fontWeight: 700, color: "#1A3A5C", marginBottom: 2,
+                  }}>{loc.name}</div>
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
+                    color: "#555", lineHeight: 1.5,
+                  }}>{loc.note}</div>
+                </div>
+                <span style={{
+                  fontSize: 11, color: "#2980B9", fontWeight: 700,
+                  fontFamily: "'Source Sans 3', sans-serif",
+                  flexShrink: 0, alignSelf: "center",
+                }}>View →</span>
+              </a>
+            ))}
+
+            {/* Static map overview link */}
             <a href={`https://www.openstreetmap.org/?mlat=${item.primaryLat}&mlon=${item.primaryLng}#map=${item.primaryZoom}/${item.primaryLat}/${item.primaryLng}`}
               target="_blank" rel="noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
                 fontSize: 13, fontWeight: 700, color: "#1A3A5C",
                 background: "#fff", border: "1.5px solid #2980B9",
-                padding: "7px 13px", borderRadius: 20, textDecoration: "none",
-                fontFamily: "'Source Sans 3', sans-serif",
-              }}>🗺️ Open in OpenStreetMap →</a>
+                padding: "8px 14px", borderRadius: 20, textDecoration: "none",
+                fontFamily: "'Source Sans 3', sans-serif", marginTop: 4,
+              }}>🗺️ Open Full Map →</a>
             <p style={{
               fontSize: 11, color: "#BBB", margin: "8px 0 0",
               fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
-            }}>Tap any location above to explore it. Modern place names shown — ancient borders differed.</p>
+            }}>Tap any location pin to open it on OpenStreetMap. Modern place names shown — ancient borders differed.</p>
           </>)}
 
           {/* ── Timeline ── */}

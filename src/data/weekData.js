@@ -283,8 +283,8 @@ const week24 = {
               license: "© The Church of Jesus Christ of Latter-day Saints",
               wikiUrl: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/24?lang=eng" },
           ],
-          gospelLibraryUrl: "gospellibrary://artwork",
-          gospelLibraryLabel: "Browse More LDS Art →" },
+          gospelLibraryUrl: "https://www.churchofjesuschrist.org/media/images?lang=eng&q=samuel+david",
+          gospelLibraryLabel: "Search LDS Art: Samuel & David →" },
         { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
           description: "This week's events happen in the hill country of ancient Canaan. Ramah was Samuel's hometown. Gibeah was Saul's royal city. Bethlehem in the southern hills was where Jesse's family — and young David — lived.",
           locations: [
@@ -730,8 +730,8 @@ export const WEEKS = [
                 license: "© The Church of Jesus Christ of Latter-day Saints",
                 wikiUrl: "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/23?lang=eng" },
             ],
-            gospelLibraryUrl: "gospellibrary://artwork",
-            gospelLibraryLabel: "Browse More LDS Art →" },
+            gospelLibraryUrl: "https://www.churchofjesuschrist.org/media/images?lang=eng&q=ruth",
+            gospelLibraryLabel: "Search LDS Art: Ruth →" },
           { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
             description: "This week's events take place between Moab (east of the Dead Sea, modern Jordan) where Ruth and Naomi lived after their husbands died, and Bethlehem (in ancient Judah) where they returned and Ruth met Boaz.",
             locations: [
@@ -958,8 +958,8 @@ export const WEEKS = [
                 license: "Public Domain",
                 wikiUrl: "https://commons.wikimedia.org/wiki/File:David_with_the_Head_of_Goliath-Caravaggio_(1610).jpg" },
             ],
-            gospelLibraryUrl: "gospellibrary://artwork",
-            gospelLibraryLabel: "Browse More LDS Art →" },
+            gospelLibraryUrl: "https://www.churchofjesuschrist.org/media/images?lang=eng&q=david+goliath",
+            gospelLibraryLabel: "Search LDS Art: David & Goliath →" },
           { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
             description: "This week ranges across the Judean highlands and lowlands. The Valley of Elah — where David killed Goliath — is a wide, flat valley between the Judean hills and Philistine territory. David later fled from Saul into the wilderness of Judea near En-gedi before eventually becoming king in Hebron.",
             locations: [
