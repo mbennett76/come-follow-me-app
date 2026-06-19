@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TYPE_CONFIG } from "../data/weekData.js";
+import StoryMap from "./StoryMap.jsx";
 
 export default function ContentCard({ item, completed, onToggle, studyMode }) {
   const [expanded, setExpanded] = useState(true);
@@ -183,56 +184,25 @@ export default function ContentCard({ item, completed, onToggle, studyMode }) {
             }}>Images from the Come Follow Me manual and public domain sources. Tap "Browse More LDS Art" to open the full Gospel Library art collection.</p>
           </>)}
 
-          {/* ── Map Location ── */}
+          {/* ── Map Location (Story Map with Ancient/Modern toggle) ── */}
           {item.type === "mapLocation" && (<>
             <p style={{
               fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
               color: "#555", lineHeight: 1.7, margin: "0 0 14px",
             }}>{item.description}</p>
 
-            {/* Individual clickable location pins */}
-            {item.locations && item.locations.map((loc, i) => (
-              <a key={i}
-                href={`https://www.openstreetmap.org/?mlat=${loc.lat}&mlon=${loc.lng}#map=12/${loc.lat}/${loc.lng}&layers=C`}
-                target="_blank" rel="noreferrer"
-                style={{
-                  display: "flex", gap: 12, alignItems: "flex-start",
-                  padding: "10px 12px", marginBottom: 8,
-                  background: "#EBF4FB", borderRadius: 10,
-                  border: "1.5px solid #AED6F1", textDecoration: "none",
-                }}>
-                <span style={{ fontSize: 20, flexShrink: 0 }}>📍</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{
-                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-                    fontWeight: 700, color: "#1A3A5C", marginBottom: 2,
-                  }}>{loc.name}</div>
-                  <div style={{
-                    fontFamily: "'Source Sans 3', sans-serif", fontSize: 12,
-                    color: "#555", lineHeight: 1.5,
-                  }}>{loc.note}</div>
-                </div>
-                <span style={{
-                  fontSize: 11, color: "#2980B9", fontWeight: 700,
-                  fontFamily: "'Source Sans 3', sans-serif",
-                  flexShrink: 0, alignSelf: "center",
-                }}>View →</span>
-              </a>
-            ))}
+            <StoryMap
+              mapPeriod={item.mapPeriod || 4}
+              primaryLat={item.primaryLat}
+              primaryLng={item.primaryLng}
+              primaryZoom={item.primaryZoom}
+              locations={item.locations}
+            />
 
-            {/* Static map overview link */}
-            <a href={`https://www.openstreetmap.org/?mlat=${item.primaryLat}&mlon=${item.primaryLng}#map=${item.primaryZoom}/${item.primaryLat}/${item.primaryLng}`}
-              target="_blank" rel="noreferrer" style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                fontSize: 13, fontWeight: 700, color: "#1A3A5C",
-                background: "#fff", border: "1.5px solid #2980B9",
-                padding: "8px 14px", borderRadius: 20, textDecoration: "none",
-                fontFamily: "'Source Sans 3', sans-serif", marginTop: 4,
-              }}>🗺️ Open Full Map →</a>
             <p style={{
-              fontSize: 11, color: "#BBB", margin: "8px 0 0",
+              fontSize: 11, color: "#BBB", margin: "10px 0 0",
               fontFamily: "'Source Sans 3', sans-serif", lineHeight: 1.5,
-            }}>Tap any location pin to open it on OpenStreetMap. Modern place names shown — ancient borders differed.</p>
+            }}>Tap any pin for details. Toggle between the official LDS Bible Map and a modern terrain map. Modern place names shown — ancient borders differed.</p>
           </>)}
 
           {/* ── Timeline ── */}

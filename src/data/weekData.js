@@ -199,9 +199,23 @@ function sk(weekNumber, dateRange, title, scriptureRange, summary, lulId, nextTi
     51:["nelson-hear-him-2020","bednar-spirit-revelation-2011","nelson-let-god-prevail-2020"],
     52:["eyring-remembrance-gratitude-1989","nelson-joy-spiritual-survival-2016","nelson-momentum-2022"],
   };
+  // Bible Map period assignment (1-9, see StoryMap.jsx BIBLE_MAPS)
+  const mapPeriodTable = {
+    1:9, 2:9, 3:9, 4:9, 5:9, 6:9, 7:9, 8:9, 9:9, 10:9, 11:9, 12:9,
+    13:2, 14:2, 15:2, 16:2, 17:2, 18:2, 19:2, 20:2, 21:2,
+    22:3,
+    23:4, 24:4, 25:4, 26:4,
+    27:5, 28:5, 29:5, 30:5,
+    31:7, 32:7,
+    33:6, 34:6, 35:6, 36:6, 37:6, 38:6, 39:6, 40:6,
+    41:6, 42:6, 43:6, 44:7, 45:7,
+    46:7, 47:7,
+    48:9, 49:9, 50:9, 51:9, 52:9,
+  };
   return {
     weekNumber, year: 2026, dateRange, title, scriptureRange,
     theme: summary, skeleton: true,
+    mapPeriod: mapPeriodTable[weekNumber] || 4,
     featuredTalkIds: talkMap[weekNumber] || ["nelson-hear-him-2020","eyring-mountains-2012","bednar-spirit-revelation-2011"],
     days: [
       { day: 0, label: "Sunday", shortLabel: "Sun", title: "Overview & Invitation", timeEst: "10 min",
@@ -287,13 +301,14 @@ const week24 = {
           gospelLibraryLabel: "Search LDS Art: Samuel & David →" },
         { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
           description: "This week's events happen in the hill country of ancient Canaan. Ramah was Samuel's hometown. Gibeah was Saul's royal city. Bethlehem in the southern hills was where Jesse's family — and young David — lived.",
+          mapPeriod: 4,
           locations: [
             { name: "Ramah (modern er-Ram)", note: "Samuel's hometown — where he judged Israel and warned them against a king",
               lat: 31.8644, lng: 35.2181, zoom: 9 },
             { name: "Gibeah (modern Tell el-Ful)", note: "Saul's royal city — capital of Israel's first monarchy",
               lat: 31.8186, lng: 35.2223, zoom: 9 },
             { name: "Bethlehem", note: "Where Samuel anointed young David — the shepherd boy from Jesse's family",
-              lat: 31.7054, lng: 35.2024, zoom: 9 },
+              lat: 31.7054, lng: 35.2024, zoom: 9, otherWeeks: ["Week 23 — Ruth & Boaz"] },
           ],
           primaryLat: 31.85, primaryLng: 35.22, primaryZoom: 9 },
         { type: "timeline", icon: "📅", label: "Timeline: Where This Week Fits",
@@ -456,6 +471,7 @@ const week24 = {
     { ref: "1 Samuel 16:13", text: "And Samuel took the horn of oil, and anointed him in the midst of his brethren: and the Spirit of the Lord came upon David from that day forward.",
       appUrl: "gospellibrary://content/scriptures/ot/1-sam/16.13#p13", webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/16?lang=eng&id=p13#p13" },
   ],
+  mapPeriod: 4,
   featuredTalkIds: ["bednar-heart-mighty-change-2012", "nelson-let-god-prevail-2020", "nelson-momentum-2022"],
 };
 
@@ -734,9 +750,10 @@ export const WEEKS = [
             gospelLibraryLabel: "Search LDS Art: Ruth →" },
           { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
             description: "This week's events take place between Moab (east of the Dead Sea, modern Jordan) where Ruth and Naomi lived after their husbands died, and Bethlehem (in ancient Judah) where they returned and Ruth met Boaz.",
+            mapPeriod: 4,
             locations: [
               { name: "Bethlehem", note: "Where Ruth and Naomi returned; where Boaz lived; birthplace of David and later Jesus",
-                lat: 31.7054, lng: 35.2024, zoom: 8 },
+                lat: 31.7054, lng: 35.2024, zoom: 8, otherWeeks: ["Week 24 — David anointed"] },
               { name: "Moab (modern Karak, Jordan)", note: "Where Ruth and Naomi lived after Naomi's family moved during the famine",
                 lat: 31.1836, lng: 35.7043, zoom: 8 },
               { name: "Shiloh", note: "Where the tabernacle was located — where Hannah prayed for a son",
@@ -918,6 +935,7 @@ export const WEEKS = [
         appUrl: "gospellibrary://content/scriptures/ot/1-sam/3.10#p10",
         webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/3?lang=eng&id=p10#p10" },
     ],
+    mapPeriod: 4,
     featuredTalkIds: ["uchtdorf-forget-me-not-2011", "holland-broken-things-2006", "bednar-spirit-revelation-2011"],
   },
   week24, // June 8–14 — FULLY BUILT
@@ -962,6 +980,7 @@ export const WEEKS = [
             gospelLibraryLabel: "Search LDS Art: David & Goliath →" },
           { type: "mapLocation", icon: "🗺️", label: "Where This Week's Story Happened",
             description: "This week ranges across the Judean highlands and lowlands. The Valley of Elah — where David killed Goliath — is a wide, flat valley between the Judean hills and Philistine territory. David later fled from Saul into the wilderness of Judea near En-gedi before eventually becoming king in Hebron.",
+            mapPeriod: 4,
             locations: [
               { name: "Valley of Elah", note: "Where David fought Goliath — a wide, flat valley on the border of Judah and Philistia",
                 lat: 31.6987, lng: 34.9418, zoom: 9 },
@@ -971,6 +990,8 @@ export const WEEKS = [
                 lat: 31.5326, lng: 35.0998, zoom: 9 },
               { name: "Jerusalem (Jebus)", note: "The Jebusite city David captured and made his capital — 'the City of David'",
                 lat: 31.7767, lng: 35.2345, zoom: 9 },
+              { name: "Bethlehem", note: "David's hometown — where he was anointed by Samuel as a boy",
+                lat: 31.7054, lng: 35.2024, zoom: 9, otherWeeks: ["Week 23 — Ruth & Boaz", "Week 24 — David anointed"] },
             ],
             primaryLat: 31.65, primaryLng: 35.10, primaryZoom: 8 },
           { type: "timeline", icon: "📅", label: "Timeline: Where This Week Fits",
@@ -1153,6 +1174,7 @@ export const WEEKS = [
         appUrl: "gospellibrary://content/scriptures/ot/2-sam/7.16#p16",
         webUrl: "https://www.churchofjesuschrist.org/study/scriptures/ot/2-sam/7?lang=eng&id=p16#p16" },
     ],
+    mapPeriod: 4,
     featuredTalkIds: ["holland-lord-i-believe-2013", "eyring-mountains-2012", "nelson-let-god-prevail-2020"],
   }, // June 15–21 — FULLY BUILT
   sk(26, "June 22–28, 2026",      "Hear Thou in Heaven",                 "2 Samuel 11–12; 1 Kings 3; 8–11",     "David's fall with Bathsheba, Solomon's wisdom, the temple dedication, and Solomon's downfall", null,          "If the Lord Be God, Follow Him",
