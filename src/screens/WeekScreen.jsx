@@ -75,7 +75,17 @@ function AIBox({ dayData, studyMode }) {
 
 export default function WeekScreen({ week, studyMode, completedItems, setCompletedItems }) {
   const todayIndex = new Date().getDay();
-  const [activeDay, setActiveDay] = useState(todayIndex);
+  const dayStorageKey = `cfm_active_day_w${week.weekNumber}`;
+  const [activeDay, setActiveDayState] = useState(() => {
+    try {
+      const saved = localStorage.getItem(dayStorageKey);
+      return saved !== null ? JSON.parse(saved) : todayIndex;
+    } catch { return todayIndex; }
+  });
+  const setActiveDay = (day) => {
+    setActiveDayState(day);
+    try { localStorage.setItem(dayStorageKey, JSON.stringify(day)); } catch {}
+  };
   const dayData = week.days[activeDay];
 
   const totalItems = week.days.reduce((a, d) => a + d.content.length, 0);
