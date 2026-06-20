@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import {
   db, saveUserProfile, getUserProfile, createGroup, getGroup, joinGroup,
   syncProgress, saveHighlight, listenToGroupMembers, listenToGroupHighlights,
-  generateUserId, generateGroupCode,
+  generateUserId, generateGroupCode, removeMember,
 } from "../firebase.js";
 
 const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -219,7 +219,7 @@ function SetupScreen({ onComplete }) {
 }
 
 // ── Member card ───────────────────────────────────────────────────────────────
-function MemberCard({ member, isMe, currentWeekNumber }) {
+function MemberCard({ member, isMe, currentWeekNumber, onRemove }) {
   const progress = member.weekProgress?.[`w${currentWeekNumber}`];
   const pct = progress ? Math.round((progress.completedCount / Math.max(progress.totalItems, 1)) * 100) : 0;
   const dayLabel = progress ? DAY_LABELS[progress.currentDay] || "—" : "—";
@@ -260,6 +260,13 @@ function MemberCard({ member, isMe, currentWeekNumber }) {
           fontFamily: "'Source Sans 3', sans-serif", fontSize: 18,
           fontWeight: 700, color: pct === 100 ? "#27AE60" : "#1B3A2D",
         }}>{pct}%</div>
+        {!isMe && onRemove && (
+          <button onClick={onRemove} title="Remove from group" style={{
+            background: "none", border: "none", cursor: "pointer",
+            fontSize: 16, color: "#CCC", padding: "4px 2px", marginLeft: 2,
+            lineHeight: 1,
+          }}>✕</button>
+        )}
       </div>
 
       {/* Progress bar */}
@@ -392,6 +399,19 @@ export default function FamilyScreen({ currentWeek, completedItems, studyMode })
   const [activeTab, setActiveTab] = useState("progress");
   const [loadingGroup, setLoadingGroup] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(null); // { uid, name } or null
+  const [removing, setRemoving] = useState(false);
+
+  const handleRemoveMember = async (uid) => {
+    if (!groupData?.code) return;
+    setRemoving(true);
+    await removeMember(groupData.code, uid);
+    // Refresh group data so the member list updates immediately
+    const updated = await getGroup(groupData.code);
+    setGroupData(updated ? { ...updated, code: groupData.code } : null);
+    setRemoving(false);
+    setConfirmRemove(null);
+  };
 
   const todayDayIndex = new Date().getDay();
 
@@ -561,9 +581,48 @@ export default function FamilyScreen({ currentWeek, completedItems, studyMode })
                 member={member}
                 isMe={false}
                 currentWeekNumber={currentWeek.weekNumber}
+                onRemove={() => setConfirmRemove({ uid: member.uid, name: member.displayName || "this member" })}
               />
             ))
           }
+
+          {/* Remove confirmation dialog */}
+          {confirmRemove && (
+            <div style={{
+              position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              zIndex: 1000, padding: 20,
+            }} onClick={() => !removing && setConfirmRemove(null)}>
+              <div style={{
+                background: "#fff", borderRadius: 16, padding: 24,
+                maxWidth: 340, width: "100%",
+              }} onClick={e => e.stopPropagation()}>
+                <div style={{
+                  fontFamily: "'EB Garamond', serif", fontSize: 19,
+                  fontWeight: 600, color: "#1B3A2D", marginBottom: 8,
+                }}>Remove {confirmRemove.name}?</div>
+                <p style={{
+                  fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
+                  color: "#666", lineHeight: 1.6, margin: "0 0 18px",
+                }}>They'll be removed from this family group's progress and thoughts. They can rejoin later with the group code if needed.</p>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={() => setConfirmRemove(null)} disabled={removing} style={{
+                    flex: 1, padding: "10px", borderRadius: 10,
+                    border: "1.5px solid #DDD", background: "#fff",
+                    color: "#666", fontWeight: 700, fontSize: 14,
+                    fontFamily: "'Source Sans 3', sans-serif", cursor: "pointer",
+                  }}>Cancel</button>
+                  <button onClick={() => handleRemoveMember(confirmRemove.uid)} disabled={removing} style={{
+                    flex: 1, padding: "10px", borderRadius: 10,
+                    border: "none", background: "#C0392B",
+                    color: "#fff", fontWeight: 700, fontSize: 14,
+                    fontFamily: "'Source Sans 3', sans-serif", cursor: "pointer",
+                    opacity: removing ? 0.6 : 1,
+                  }}>{removing ? "Removing…" : "Remove"}</button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {memberList.length <= 1 && (
             <div style={{
