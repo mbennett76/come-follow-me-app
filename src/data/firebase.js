@@ -54,6 +54,15 @@ export async function joinGroup(groupCode, userId) {
   return { success: true, group: { ...group, code } };
 }
 
+export async function removeMember(groupCode, userIdToRemove) {
+  const code = groupCode.toUpperCase();
+  const group = await getGroup(code);
+  if (!group) return { error: "Group not found." };
+  const members = (group.members || []).filter(id => id !== userIdToRemove);
+  await setDoc(doc(db, "groups", code), { members }, { merge: true });
+  return { success: true };
+}
+
 // ── Progress sync ─────────────────────────────────────────────────────────────
 export async function syncProgress(userId, weekNumber, dayIndex, completedItems, currentDay) {
   await setDoc(doc(db, "progress", `${userId}_w${weekNumber}`), {
