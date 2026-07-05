@@ -74,7 +74,9 @@ function AIBox({ dayData, studyMode }) {
 }
 
 export default function WeekScreen({ week, studyMode, completedItems, setCompletedItems }) {
-  const todayIndex = new Date().getDay();
+  // New day order: 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+  // getDay() returns: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+  const todayIndex = ((new Date().getDay() + 6) % 7);
   const dayStorageKey = `cfm_active_day_w${week.weekNumber}`;
   const [activeDay, setActiveDayState] = useState(() => {
     try {
@@ -209,6 +211,7 @@ export default function WeekScreen({ week, studyMode, completedItems, setComplet
             completed={!!completedItems[`w${week.weekNumber}_d${activeDay}_${i}`]}
             onToggle={() => toggle(activeDay, i)}
             studyMode={studyMode}
+            week={week}
           />
         ))}
 
