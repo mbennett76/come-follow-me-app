@@ -1,99 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TYPE_CONFIG } from "../data/weekData.js";
 import StoryMap from "./StoryMap.jsx";
 
-// ── AI-powered Week Summary Card ─────────────────────────────────────────────
-function WeekSummaryCard({ prompt, weekNumber }) {
-  const cacheKey = `cfm_week_summary_w${weekNumber}`;
-  const [summary, setSummary] = useState(() => {
-    try { return localStorage.getItem(cacheKey) || null; } catch { return null; }
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const generate = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-      const data = await response.json();
-      const text = data.content?.find(b => b.type === "text")?.text || "";
-      if (text) {
-        setSummary(text);
-        try { localStorage.setItem(cacheKey, text); } catch {}
-      } else {
-        setError("Could not generate summary. Please try again.");
-      }
-    } catch (e) {
-      setError("Connection error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div>
-      {!summary && !loading && (
-        <div style={{ textAlign: "center", padding: "12px 0 8px" }}>
-          <p style={{
-            fontFamily: "'Source Sans 3', sans-serif", fontSize: 14,
-            color: "#555", lineHeight: 1.6, marginBottom: 14,
-          }}>
-            Tap below to generate a personalized narrative summary of this week's study — written fresh just for you.
-          </p>
-          <button onClick={generate} style={{
-            background: "linear-gradient(135deg, #1B3A2D, #27AE60)",
-            color: "#fff", border: "none", borderRadius: 10,
-            padding: "10px 22px", fontSize: 14, fontWeight: 700,
-            fontFamily: "'Source Sans 3', sans-serif",
-            cursor: "pointer", letterSpacing: "0.03em",
-          }}>
-            ✨ Generate Week Summary
-          </button>
-          {error && <p style={{ color: "#c0392b", fontSize: 13, marginTop: 10 }}>{error}</p>}
-        </div>
-      )}
-      {loading && (
-        <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: "#888" }}>
-            ✨ Generating your week summary…
-          </p>
-        </div>
-      )}
-      {summary && (
-        <div>
-          {summary.split("\n\n").filter(p => p.trim()).map((para, i) => (
-            <p key={i} style={{
-              fontFamily: "'Source Sans 3', sans-serif", fontSize: 15,
-              color: "#1A3A5C", lineHeight: 1.75, marginBottom: 14,
-            }}>{para.trim()}</p>
-          ))}
-          <button onClick={() => {
-            setSummary(null);
-            try { localStorage.removeItem(cacheKey); } catch {}
-          }} style={{
-            background: "transparent", border: "1px solid #4A90D9",
-            color: "#4A90D9", borderRadius: 8, padding: "6px 14px",
-            fontSize: 12, cursor: "pointer", marginTop: 4,
-            fontFamily: "'Source Sans 3', sans-serif",
-          }}>
-            ↺ Regenerate
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function ContentCard({ item, completed, onToggle, studyMode, week }) {
+export default function ContentCard({ item, completed, onToggle, studyMode }) {
   const [expanded, setExpanded] = useState(true);
   const cfg = TYPE_CONFIG[item.type] || TYPE_CONFIG.insight;
 
@@ -590,9 +499,14 @@ export default function ContentCard({ item, completed, onToggle, studyMode, week
             }}>💡 If you get a 502 error, tap "Search Google" or use the Gospel Library app.</p>
           </>)}
 
-          {/* ── AI Week Summary (Sunday closing reflection) ── */}
-          {item.type === "weekSummary" && (
-            <WeekSummaryCard prompt={item.prompt} weekNumber={week?.weekNumber} />
+          {/* ── Week Summary (pre-written narrative) ── */}
+          {item.type === "weekSummary" && item.text && (
+            item.text.split("\n\n").filter(p => p.trim()).map((para, i) => (
+              <p key={i} style={{
+                fontFamily: "'Source Sans 3', sans-serif", fontSize: 15,
+                color: "#1A3A5C", lineHeight: 1.75, marginBottom: 14,
+              }}>{para.trim()}</p>
+            ))
           )}
 
           {/* ── Coming Soon placeholder ── */}

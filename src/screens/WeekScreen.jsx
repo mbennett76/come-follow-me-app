@@ -211,7 +211,7 @@ export default function WeekScreen({ week, studyMode, completedItems, setComplet
             completed={!!completedItems[`w${week.weekNumber}_d${activeDay}_${i}`]}
             onToggle={() => toggle(activeDay, i)}
             studyMode={studyMode}
-            week={week}
+
           />
         ))}
 
